@@ -1,0 +1,182 @@
+<div class="card border-0">
+  <!-- *** PC search form -->
+  <form *ngIf="!mobileScreen" [formGroup]="searchForm">
+    <div class="flex justify-content-center align-items-center">
+      <div class="grid col-9 search-form-table">
+        <div class="grid w-12 pb-0 justify-content-center">
+          <div class="grid col-4">
+            <div class="col-4 label-column text-right"><label>Từ Ngày</label></div>
+            <div class="col-8">
+              <p-calendar id="from-date-input" formControlName="fromDate" [showIcon]="true" [showOnFocus]="false"
+                dateFormat="dd/mm/yy" placeholder="Từ Ngày" [showButtonBar]="true"
+                [style]="{'width':'100%','height':'2.5rem'}">
+              </p-calendar>
+            </div>
+          </div>
+          <div class="grid col-4">
+            <div class="col-4 label-column text-right">
+              <label>Đến Ngày</label>
+            </div>
+            <div class="col-8">
+              <p-calendar id="to-date-input" formControlName="toDate" [showIcon]="true" [showOnFocus]="false"
+                dateFormat="dd/mm/yy" placeholder="Đến Ngày" [showButtonBar]="true"
+                [style]="{'width':'100%','height':'2.5rem'}">
+              </p-calendar>
+            </div>
+          </div>
+          <div class="grid col-4">
+            <div class="col-4 label-column text-right"><label>Loại Thiết Bị</label></div>
+            <div class="col-8">
+              <p-dropdown [showClear]="true" [options]="listCategory" placeholder="Yêu Cầu" formControlName="category"
+                optionLabel="name" optionValue="value" autoWidth="false" [style]="{'width':'100%'}"></p-dropdown>
+            </div>
+          </div>
+        </div>
+        <div class="grid w-12 justify-content-center">
+          <div class="grid col-4">
+            <div class="col-4 label-column text-right"><label>Tên NV</label></div>
+            <div class="col-8"><input type="text" class="w-full" (keyup.enter)="onSearch()" [maxLength]="50" pInputText
+                formControlName="name" /></div>
+          </div>
+          <div class="grid col-4">
+            <div class="col-4 label-column text-right"><label>Phòng Ban</label></div>
+            <div class="col-8">
+              <p-dropdown [showClear]="true" [options]="listDepartment" formControlName="departmentId"
+                optionLabel="name" optionValue="value" placeholder="Chọn phòng ban" [style]="{'width':'100%'}">
+              </p-dropdown>
+            </div>
+          </div>
+          <div class="grid col-4">
+            <div class="col-4 label-column text-right"><label>Trạng Thái</label>
+            </div>
+            <div class="col-8">
+              <p-dropdown styleClass="w-full" [showClear]="true" placeholder="Chọn trạng thái" formControlName="confirm"
+                optionLabel="name" optionValue="value" [options]="listConfirm">
+              </p-dropdown>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p-button pRipple icon="pi pi-search" class="p-button-rounded p-button-outlined ml-4" label="Tìm Kiếm"
+        (click)="onSearch()">
+      </p-button>
+    </div>
+  </form>
+  <!-- end *** -->
+  <!-- *** Mobile search dialog trigger button -->
+  <div class="block sm:hidden my-2 w-full flex justify-content-end">
+    <p-button pRipple icon="pi pi-filter" class="p-button-rounded p-button-outlined" label="Lọc"
+      (click)="searchDialog=true">
+    </p-button>
+  </div>
+  <!-- end *** -->
+  <!-- ***table -->
+  <div>
+    <div class="hidden md:flex flex-row align-items-center justify-content-between">
+      <div class="ml-2 text-lg font-medium flex flex-row align-items-center">
+        Số bản ghi: {{recordStart}}-{{recordEnd}} (Tổng số {{totalRecord}})
+      </div>
+      <div>
+        <p-paginator [rows]="pageSize" [totalRecords]="totalRecord" [pageLinkSize]="pageLinkSize"
+          (onPageChange)="pageClick($event)" #paginator>
+        </p-paginator>
+      </div>
+
+    </div>
+    <p-table [columns]="cols" class="table-data" [value]="listEquipmentBooking" scrollHeight="70vh"
+      [style]="{'width': (mobileScreen?(screenWidth+'px'):'100%')}" styleClass="p-datatable-gridlines p-datatable-xl"
+      responsiveLayout="scroll" [scrollable]="mobileScreen" scrollDirection="both">
+      <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+          <col *ngFor="let col of columns" [style.width]="col.width" />
+        </colgroup>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th class="text-center" *ngFor="let col of columns">
+            {{ col.header }}
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-data>
+        <tr>
+          <td class="text-center">{{ data.fullName }}</td>
+          <td class="text-center">{{ data.departmentName }}</td>
+          <td class="text-left">{{ data.category }}</td>
+          <td style="text-align: left; white-space: pre-wrap;">{{ data.description }}</td>
+          <td class="text-center">{{ data.requestDay }}</td>
+          <td class="text-left">
+            <div class="reason">{{ data.reason }}</div>
+          </td>
+          <td *ngIf="data.deleteFlag==false" style="text-align: center">{{ data.confirm }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <div *ngIf="mobileScreen" class="flex md:hidden flex-row justify-content-between pl-2 align-items-center">
+      <label class="text-lg font-medium">{{recordStart}}-{{recordEnd}} (Tổng số {{totalRecord}})</label>
+      <p-paginator [rows]="pageSize" [totalRecords]="totalRecord" [pageLinkSize]="pageLinkSize"
+        (onPageChange)="pageClick($event)" #paginator>
+      </p-paginator>
+    </div>
+  </div>
+  <!-- end *** -->
+</div>
+<!-- *** search dialog *** -->
+<p-dialog [(visible)]="searchDialog" [modal]="true" header="Cửa Sổ Tìm Kiếm" [style]="{'width': '95%'}">
+  <div class="mobile-approve-time flex-wrap pl-3 pt-2 text-base" [formGroup]="searchForm">
+    <div class="w-full">
+      <div class="grid w-full">
+        <div class="col-4"><label>Từ Ngày</label></div>
+        <div class="col-8">
+          <p-calendar id="from-date-input" formControlName="fromDate" [showIcon]="true" [showOnFocus]="false"
+            dateFormat="dd/mm/yy" placeholder="Từ Ngày" [showButtonBar]="true"
+            [style]="{'width':'100%', 'height':'2.5rem'}">
+          </p-calendar>
+        </div>
+      </div>
+      <div class="grid w-full">
+        <div class="label-column col-4"><label>Đến Ngày</label></div>
+        <div class="col-8">
+          <p-calendar id="to-date-input" formControlName="toDate" [showIcon]="true" [showOnFocus]="false"
+            dateFormat="dd/mm/yy" placeholder="Đến Ngày" [showButtonBar]="true"
+            [style]="{'width':'100%', 'height':'2.5rem'}">
+          </p-calendar>
+        </div>
+      </div>
+      <div class="grid w-full">
+        <div class="label-column col-4"><label>Loại Thiết Bị</label></div>
+        <div class="col-8">
+          <p-dropdown styleClass="w-full" appendTo="body" [showClear]="true" [options]="listCategory"
+            placeholder="Loại thiết bị" formControlName="category" optionLabel="name" optionValue="value"></p-dropdown>
+        </div>
+      </div>
+      <div class="grid w-full">
+        <div class="label-column col-4"><label>Tên NV</label></div>
+        <div class="col-8"><input type="text" class="w-full" (keyup.enter)="onSearch()" [maxLength]="50" pInputText
+            formControlName="name" /></div>
+      </div>
+      <div class="grid w-full">
+        <div class="label-column col-4"><label>Phòng Ban</label></div>
+        <div class="col-8">
+          <p-dropdown styleClass="w-full" appendTo="body" [showClear]="true" [options]="listDepartment"
+            placeholder="Chọn phòng ban" formControlName="departmentId" optionLabel="name" optionValue="name">
+          </p-dropdown>
+        </div>
+      </div>
+      <div class="grid w-full">
+        <div class="label-column col-4"><label>Trạng Thái</label></div>
+        <div class="col-8">
+          <p-dropdown styleClass="w-full" [showClear]="true" placeholder="Chọn trạng thái" formControlName="confirm"
+            optionLabel="name" optionValue="value" [options]="listConfirm" [style]="{'width':'100%'}">
+          </p-dropdown>
+        </div>
+      </div>
+      <div class=" w-full mt-4" style="text-align:right">
+        <p-button pRipple icon="pi pi-search" class="p-button-rounded p-button-outlined mr-3" label="Tìm Kiếm"
+          (click)="onSearch();searchDialog=false">
+        </p-button>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+<!-- end -->

@@ -1,0 +1,59 @@
+.choose-file {
+  border: 1px solid grey;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px;
+  border-radius: 5px;
+  margin-right: 5px;
+}
+
+input[type="file"] {
+opacity: 0;
+overflow: hidden;
+  width: 100%;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.custom-file-upload {
+  font-size: 14px;
+  color: white;
+  background-color: #ea733b;
+  display: inline-block;
+  cursor: pointer;
+  padding: 5px 8px;
+  order: 1;
+  border-radius: 3px;
+  z-index: 1;
+  width: 40%;
+  text-align: center;
+}
+
+.import-btn{
+  background-color: #1bb7f2;
+  border: none;
+  font-weight: 500;
+  border-radius: 5px;
+}
+
+.file-select-container {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.file-select-container span {
+  font-weight: 600;
+  margin-right: 8px;
+}
+
+:host ::ng-deep .p-dialog-content {
+  overflow-y: hidden;
+}
+
+:host ::ng-deep .p-dialog-footer {
+  padding-bottom: 5px;
+}

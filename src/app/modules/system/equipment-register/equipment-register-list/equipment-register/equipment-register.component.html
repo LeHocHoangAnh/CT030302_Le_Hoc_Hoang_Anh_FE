@@ -1,0 +1,51 @@
+<div *ngIf="!mobileScreen" class="w-full" style="text-align:left">
+    <button pButton type="button" icon="pi pi-plus" class="p-button-raised p-button-outlined mb-2"
+        (click)="openRegisterDialog(null)" label="Đăng ký"></button>
+</div>
+<p-table #rtbl [columns]="registrationCols" [value]="registrationList" styleClass="p-datatable-gridlines p-datatable-xl"
+    [rows]="tableRows" [paginator]="true"
+    [globalFilterFields]="['category','description', 'requestDate','reason', 'confirm']">
+    <ng-template pTemplate="caption">
+        <span class="flex flex-row justify-content-between align-items-center w-full">
+            <label [style.display]="mobileScreen?'none':'block'">Danh sách đơn đăng ký</label>
+            <span class="p-input-icon-left ml-auto">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="rtbl.filterGlobal($event.target.value, 'contains')"
+                    placeholder="Search keyword" />
+            </span>
+        </span>
+    </ng-template>
+    <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+            <col *ngFor="let col of columns" [style.width]="col.width">
+        </colgroup>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns" style="text-align: center">{{col.header}}</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+            <td *ngFor="let col of columns" style="text-align: center">
+                <div *ngIf="col.field==='edit'">
+                    <button pButton pRipple type="button" [icon]="isLeader?'pi pi-bars':'pi pi-pencil'"
+                        class="p-button-rounded p-button-text p-button-info btn-delete"
+                        (click)="openRegisterDialog(rowData['id'])"></button>
+                </div>
+                <div *ngIf="col.field!=='edit'">
+                    {{rowData[col.field]}}
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="5">Danh sách trống</td>
+        </tr>
+    </ng-template>
+</p-table>
+<div *ngIf="mobileScreen" class="w-full" style="text-align:end">
+    <button pButton type="button" icon="pi pi-plus" class="p-button-raised p-button-outlined mt-3"
+        (click)="openRegisterDialog(null)" label="Đăng ký"></button>
+</div>

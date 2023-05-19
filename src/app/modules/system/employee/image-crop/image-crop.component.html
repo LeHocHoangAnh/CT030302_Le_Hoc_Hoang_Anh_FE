@@ -1,0 +1,25 @@
+<div class="flex justify-content-center min-w-full ">
+    <div>
+        <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
+            [containWithinAspectRatio]="containWithinAspectRatio" [aspectRatio]="3 / 4" [resizeToWidth]="256"
+            [cropperMinWidth]="128" [onlyScaleDown]="true" [roundCropper]="false" [canvasRotation]="canvasRotation"
+            [transform]="transform" [alignImage]="'left'" [style.display]="showCropper ? null : 'none'" format="png"
+            (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
+            (loadImageFailed)="loadImageFailed()"></image-cropper>
+        <div class="flex justify-content-center">
+            <button pButton pRipple type="button" icon="bx bx-rotate-left" class="mx-1 p-button-outlined p-button-rounded p-button-secondary"
+                (click)="rotateLeft()"></button>
+            <button pButton pRipple type="button" icon="bx bx-rotate-right" class="mx-1 p-button-outlined p-button-rounded p-button-secondary"
+                (click)="rotateRight()"></button>
+            <button pButton pRipple type="button" icon="bx bx-zoom-in" class="mx-1 p-button-outlined p-button-rounded p-button-secondary"
+                (click)="zoomIn()"></button>
+            <button pButton pRipple type="button" icon="bx bx-zoom-out" class="mx-1 p-button-outlined p-button-rounded p-button-secondary"
+                (click)="zoomOut()"></button>
+            <button pButton pRipple type="button" icon="bx bx-reset" class="mx-1 p-button-outlined p-button-rounded p-button-secondary"
+                (click)="resetImage()"></button>
+        </div>
+        <div class="text-right">
+            <button pButton pRipple type="butotn" label="Lưu" (click)="saveImageCropped()" class="px-5"></button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,84 @@
+<div class="card border-0">
+    <form [formGroup]="editForm">
+        <div class="grid ml-0 w-full">
+            <div class="grid align-items-center col-12">
+                <span class="col-4 font-medium">
+                    <label>Loại Thiết Bị</label>
+                    <label class="kinda-important">{{notNull}}</label>
+                </span>
+                <span class="col-8">
+                    <p-dropdown [style]="{'width':'100%'}" [options]="equipmentCategory"
+                        placeholder="Chọn loại thiết bị" optionLabel="name" optionValue="value"
+                        formControlName="category" [ngClass]="{'ng-dirty': submitted && getControl.category.errors}">
+                    </p-dropdown>
+                </span>
+            </div>
+            <div class="grid align-items-center col-12">
+                <span class="col-4 font-medium">
+                    <label>Mô Tả Thiết Bị</label>
+                    <label class="kinda-important">{{notNull}}</label>
+                </span>
+                <span class="col-8"><textarea [style]="{'width':'100%'}" class="w-full" pInputTextarea [rows]="3"
+                        formControlName="description"
+                        [ngClass]="{'ng-dirty': submitted && getControl.description.errors}"></textarea></span>
+            </div>
+            <div class="grid align-items-center col-12">
+                <span class="col-4 font-medium">
+                    <label>Ngày Nhận</label>
+                    <label class="kinda-important">{{notNull}}</label>
+                </span>
+                <span class="col-8">
+                    <p-calendar placeholder="Chọn ngày nhận" baseZIndex="2" [appendTo]="mobileScreen?'':'body'"
+                        dateFormat="dd/mm/yy" formControlName="requestDate" [showIcon]="true" class="calendar-field"
+                        [showOtherMonths]="true" [style]="{'width':'100%','height':'4vh'}"
+                        [ngClass]="{'ng-dirty': submitted && getControl.requestDate.errors}">
+                    </p-calendar>
+                </span>
+            </div>
+            <div class="grid align-items-center col-12">
+                <span class="col-4 font-medium">
+                    <label>Lý Do</label>
+                    <label class="kinda-important">{{notNull}}</label>
+                </span>
+                <span class="col-8"><textarea [style]="{'width':'100%'}" class="w-full" pInputTextarea [rows]="2"
+                        formControlName="reason"
+                        [ngClass]="{'ng-dirty': submitted && getControl.reason.errors}"></textarea></span>
+            </div>
+            <div class="grid align-items-center col-12">
+                <span class="col-12 sm:col-4 font-medium">
+                    <label>Người Phê Duyệt</label>
+                    <label class="kinda-important">{{notNull}}</label>
+                </span>
+                <span class="col-12 sm:col-8">
+                    <p-dropdown [style]="{'width':'100%'}" [options]="approverList" appendTo="body" optionLabel="name"
+                        optionValue="value" formControlName="approver"
+                        [ngClass]="{'ng-dirty': submitted && getControl.approver.errors}"></p-dropdown>
+                </span>
+            </div>
+            <div *ngIf="id!==null" class="grid align-items-center col-12 mt-4">
+                <span class="hidden sm:block col-4 font-medium">
+                    <label>Trạng Thái</label>
+                </span>
+                <span class="col-12 sm:col-8">
+                    <button *ngIf="confirm === 1" style="background-color: #04aa6d" pButton pRipple type="button"
+                        label="Xác nhận" class="w-full"></button>
+                    <button *ngIf="confirm === 0" pButton pRipple type="button" label="Chờ xác nhận"
+                        class="p-button-warning w-full"></button>
+                    <button *ngIf="confirm === 2" pButton pRipple type="button" label="Từ chối"
+                        class="p-button-danger w-full"></button>
+                </span>
+            </div>
+            <div *ngIf="confirm !== 1" class="grid col-12 flex=row align-items-center justify-content-end mt-4">
+                <div *ngIf="id!==null">
+                    <p-button type="submit" icon="pi pi-times" [label]="mobileScreen?'':'Xóa'" class="mr-1"
+                        [style]="{'background-color': '#D32F2F','border-color':'#D32F2F'}" (click)="openDeleteConfirm($event)">
+                    </p-button>
+                </div>
+                <div>
+                    <p-button type="submit" icon="pi pi-save" [label]="mobileScreen?'':'Lưu'" (click)="onSubmit()">
+                    </p-button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

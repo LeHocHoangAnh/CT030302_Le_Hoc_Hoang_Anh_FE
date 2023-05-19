@@ -1,0 +1,28 @@
+<div>
+  <div id="name" class="flex flex-row justify-content-between">
+    <label for="input-depart-name" class="input-label">Tên Phòng Ban</label>
+    <input
+      id="input-depart-name"
+      style="width: 300px"
+      pInputText
+      type="text"
+      #departName
+    />
+  </div>
+  <div id="status" class="flex flex-row justify-content-between">
+    <label for="input-depart-action" class="input-label">Trạng Thái</label>
+    <p-dropdown
+      [options]="action"
+      [(ngModel)]="selectedAction"
+      optionLabel="name"
+      [style]="{ width: '300px', float: 'right' }"
+    ></p-dropdown>
+  </div>
+  <button
+    type="submit"
+    (click)="onSubmit(departName.value)"
+    pButton
+    style="float: right; margin-top: 30px"
+    label="Lưu"
+  ></button>
+</div>

@@ -1,0 +1,23 @@
+.employee-detail {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 10px;
+  }
+  .detail-label {
+    font-weight: bolder;
+  }
+  .edit-values-input .dayoff-ot-values label {
+    width: 255px;
+  }
+  .edit-values-input .salary-values label {
+    font-weight: 700;
+    width: 140px;
+  }
+  .save-button {
+    position: absolute;
+    margin-top: -20px;
+    margin-left: 90%;
+    float: right;
+  }
+  

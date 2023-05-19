@@ -1,0 +1,162 @@
+.grid {
+  margin-right: 0 !important;
+}
+
+.content-timekeeping {
+  height: 100%;
+
+  .row {
+    margin: 0;
+  }
+
+  .label {
+    color: white;
+
+    @media(min-width:320px) {
+      ul {
+        margin-left: 0;
+      }
+    }
+
+    padding: 1vh 3vh;
+    margin-right: 5px;
+  }
+
+  .success {
+    background-color: #04aa6d;
+    border-radius: 5px;
+  }
+
+  .warning {
+    background-color: #ff9800;
+    border-radius: 5px;
+  }
+
+  .danger {
+    background-color: #f44336;
+    border-radius: 5px;
+  }
+}
+
+:host ::ng-deep .fc-license-message {
+  display: none;
+}
+
+:host ::ng-deep .content-timekeeping .fc {
+  margin: 0;
+  width: 100%;
+  font-size: auto !important;
+
+  .fc-popover {
+    z-index: 1;
+  }
+
+  .fc-button-group .fc-button:first-child {
+    margin-right: 2px
+  }
+
+  .fc-col-header-cell-cushion {
+    text-decoration: none;
+  }
+
+  .fc-daygrid-day-number {
+    text-decoration: none;
+    font-weight: 500;
+    padding-right: 45%;
+  }
+
+  .fc-col-header thead {
+    background-color: aquamarine;
+  }
+
+  .fc-toolbar.fc-header-toolbar {
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+
+  .fc-event-title-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .fc-event-time {
+    display: none
+  }
+
+  .fc-event-past {
+    color: white;
+    background-color: #04aa6d;
+  }
+
+  .fc-sticky,
+  .fc-event-title {
+    font-weight: normal;
+    padding: 0;
+    margin: 0;
+
+    @media(min-width:320px) {
+      font-size: 0.5rem;
+    }
+
+    @media(min-width:768px) {
+      font-size: 0.7rem;
+    }
+
+    @media(min-width:1024px) {
+      font-size: 0.8rem;
+    }
+  }
+
+  .fc-more-link {
+    @media(min-width:320px) {
+      font-size: 0.5rem;
+    }
+
+    @media(min-width:768px) {
+      font-size: 0.7rem;
+    }
+
+    @media(min-width:1024px) {
+      font-size: 0.8rem;
+    }
+  }
+
+  .fc-toolbar-title {
+    @media(min-width:320px) {
+      font-size: 1.1rem
+    }
+
+    @media(min-width:768px) {
+      font-size: 1.5rem;
+    }
+
+    @media(min-width:1024px) {
+      font-size: 1.75rem;
+    }
+  }
+
+  .fc-daygrid-day-number,
+  .fc-col-header-cell-cushion {
+    @media(max-width:500px) {
+      font-size: 0.9rem
+    }
+  }
+}
+
+:host ::ng-deep .p-tabview {
+  .p-tabview-panels {
+    padding: 10px
+  }
+}
+
+.summary {
+  @media(max-width:500px) {
+    padding-left: 10px;
+
+    li {
+      padding: 7px 0;
+    }
+  }
+}

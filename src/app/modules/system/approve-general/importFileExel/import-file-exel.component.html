@@ -1,0 +1,32 @@
+<div>
+  <h3>Lưu Tệp Tin</h3>
+</div>
+<div appContainer class="p-0">
+  <form [formGroup]="uploadForm">
+    <div class="file-select-container">
+      <div class="span-file col-2">
+        <span>Tệp Dữ Liệu</span>
+      </div>
+      <div class="choose-file col-7">
+        <span>
+          <span class="pl-2">{{ selectedFile?.name }}</span>
+          <button *ngIf="selectedFile" pButton pRipple style="padding: 0; margin: 0; height: inherit" type="button"
+            icon="bx bx-x" (click)="clearSelectedFile()"
+            class="p-button-rounded p-button-text text-left p-button-sm p-button-danger"></button>
+        </span>
+        <label for="file" class="custom-file-upload">Chọn tệp</label>
+        <input id="file" (change)="onSelectFile($event)" type="file" accept=".xlsx" class="hidden" #exelFile />
+      </div>
+      <button pButton label="Lưu tệp" class="import-btn col-3" icon="pi pi-upload" type="button"
+        (click)="confirm('top')"></button>
+    </div>
+  </form>
+</div>
+<p-confirmDialog #cd [style]="{ width: '50vw'}" key="positionDialog" [position]="position"
+  rejectButtonStyleClass="p-button-outlined">
+  <ng-template pTemplate="footer">
+    <button type="button" class="succer-button" [style]="{ padding: '5px 10px' }" pButton
+      (click)="cd.accept()"></button>
+    <button type="button" class="cancel-button" pButton (click)="cd.reject()"></button>
+  </ng-template>
+</p-confirmDialog>

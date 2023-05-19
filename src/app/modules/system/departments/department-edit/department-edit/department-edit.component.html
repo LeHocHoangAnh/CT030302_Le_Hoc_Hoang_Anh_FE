@@ -1,0 +1,73 @@
+<div class="card border-0">
+  <h5 class="mt-2">Chỉnh Sửa Phòng Ban</h5>
+  <h6>ID: {{ id }}</h6>
+
+  <div class="edit" class="flex flex-row align-items-center justify-content-start">
+    <div id="input-name" class="flex flex-row align-items-center">
+      <label class="input-label" for="department-name">Tên Phòng Ban</label>
+      <input id="department-name" pInputText type="text" [(ngModel)]="departmentName" />
+    </div>
+    <div id="input-action" class="flex flex-row align-items-center pl-3">
+      <label class="input-label" for="department-action">Trạng Thái Phòng Ban</label>
+      <p-dropdown [options]="action" optionLabel="name" [(ngModel)]="selectedAction"
+        #departAction></p-dropdown>
+    </div>
+    <button type="button" pButton pRipple class="p-button-outlined ml-3" (click)="updateDepartment()" icon="pi pi-check"
+      label="Lưu"></button>
+  </div>
+  <div class="employee-list mt-4">
+    <div class="flex flex-row min-w-full align-items-center justify-content-between align-self-center">
+      <div class="ml-2 text-lg">
+        Nhân viên: {{recordStart}}-{{recordEnd}} (Tổng số {{totalRecord}})
+      </div>
+      <div id="page-from">
+        <p-paginator [rows]="pageSize" [pageLinkSize]="pageLinkSize" [totalRecords]="totalRecord"
+          (onPageChange)="pageClick($event)" #paginator>
+        </p-paginator>
+      </div>
+    </div>
+    <p-table [columns]="columns" [resizableColumns]="true" [scrollable]="true" [value]="employeeList"
+      scrollHeight="70vh" styleClass="p-datatable-gridlines p-datatable-striped p-datatable-sm"
+      responsiveLayout="scroll">
+      <ng-template pTemplate="caption">
+        <label> Danh Sách Nhân Viên Phòng Ban </label>
+      </ng-template>
+      <ng-template pTemplate="colgroup">
+        <colgroup>
+          <col style="width: 10%" />
+          <col style="width: 20%" />
+          <col style="width: 15%" />
+          <col style="width: 5%" />
+          <col style="width: 15%" />
+          <col style="width: 15%" />
+          <col style="width: 15%" />
+          <col style="width: 10%" />
+        </colgroup>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th *ngFor="let column of columns" style="text-align: center">
+            {{ column.header }}
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-employee>
+        <tr [pSelectableRow]="employee">
+          <td style="text-align: center">{{ employee.employeeCode }}</td>
+          <td style="text-align: center">{{ employee.email }}</td>
+          <td style="text-align: center">{{ employee.fullName }}</td>
+          <td style="text-align: center">{{ employee.gender }}</td>
+          <td style="text-align: center">{{ employee.typeContract }}</td>
+          <td style="text-align: center">{{ employee.phoneNumber }}</td>
+          <td style="text-align: center">{{ employee.dateOfBirth }}</td>
+          <td style="text-align: center">{{ employee.departmentName }}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="footer">
+
+      </ng-template>
+    </p-table>
+
+  </div>
+</div>
+<p-toast></p-toast>

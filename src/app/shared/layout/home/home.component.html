@@ -1,0 +1,96 @@
+<div class="container">
+  <div class="sidebar">
+    <div class="logo-content">
+      <div class="img-profile" routerLink="/home">
+        <div>
+          <img [src]="image" *ngIf="image !== null">
+          <i class="bx bxs-user-circle" *ngIf="image === null"></i>
+        </div>
+        <div class="name-profile">{{profileName}}</div>
+      </div>
+    </div>
+    <ul class="nav_list">
+      <li *ngIf="isHr || isLeader">
+        <a routerLink="/employee/list/1" routerLinkActive="active-high-light">
+          <i class='bx bx-male-female'></i>
+          <span class="links_name">Danh Sách Nhân Viên</span>
+        </a>
+      </li>
+      <li *ngIf="!isCustomer">
+        <a routerLink="/time-keeping" routerLinkActive="active-high-light">
+          <i class='bx bx-table'></i>
+          <span class="links_name">Đơn xin phép</span>
+        </a>
+      </li>
+      <!-- <li>
+        <a routerLink="/salary" routerLinkActive="active-high-light">
+          <i class='bx bx-money-withdraw'></i>
+          <span class="links_name">Bảng Lương</span>
+        </a>
+      </li> -->
+      <li *ngIf="isLeader">
+        <a routerLink="/confirm-day-off" routerLinkActive="active-high-light">
+          <i class='bx bx-checkbox-checked'></i>
+          <span class="links_name">Phê Duyệt Tổng Hợp</span>
+        </a>
+      </li>
+      <!-- <li *ngIf="isHr">
+        <a routerLink="/accountant" routerLinkActive="active-high-light">
+          <i class='bx bxs-calculator'></i>
+          <span class="links_name">Tổng Hợp Chấm Công</span>
+        </a>
+      </li> -->
+      <li *ngIf="isHr">
+        <a routerLink="/day-off-management" routerLinkActive="active-high-light">
+          <i class='bx bxs-calendar-star'></i>
+          <span class="links_name">Quản Lý ngày Nghỉ Lễ</span>
+        </a>
+      </li>
+      <li *ngIf="isHr">
+        <a routerLink="/projects-list" routerLinkActive="active-high-light">
+          <i class='bx bx-clipboard'></i>
+          <span class="links_name">Quản Lý Dự Án</span>
+        </a>
+      </li>
+      <li *ngIf="isHr">
+        <a routerLink="/departments-list" routerLinkActive="active-high-light">
+          <i class="bx bx-building"></i>
+          <span class="links_name">Quản Lý Phòng Ban</span>
+        </a>
+      </li>
+      <li *ngIf="isHr">
+        <a routerLink="/equipment-manage" routerLinkActive="active-high-light">
+          <i class='pi pi-shopping-cart'></i>
+          <span class="links_name">Quản Lý Thiết Bị</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/equipment-register" routerLinkActive="active-high-light">
+          <i class='bx bxs-cart-add'></i>
+          <span class="links_name">Đăng Ký Thiết Bị</span>
+        </a>
+      </li>
+      <!-- <li>
+        <a routerLink="/booking-meeting-room" routerLinkActive="active-high-light">
+          <i class='bx bx-user-voice'></i>
+          <span class="links_name">Đặt phòng họp</span>
+        </a>
+      </li> -->
+      <li>
+        <a routerLink="/internal-document" routerLinkActive="active-high-light">
+          <i class='bx bx-info-circle'></i>
+          <span class="links_name">Thông tin chung</span>
+        </a>
+      </li>
+      <!-- <li *ngIf="isHr">
+        <a routerLink="/confirm-booking-meeting-room" routerLinkActive="active-high-light">
+          <i class='bx bxs-user-check' ></i>
+          <span class="links_name">Phê duyệt phòng họp</span>
+        </a>
+      </li> -->
+    </ul>
+  </div>
+  <div class="home-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

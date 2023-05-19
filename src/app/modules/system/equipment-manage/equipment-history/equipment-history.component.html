@@ -1,0 +1,47 @@
+<p-table #listTb [columns]="cols" [value]="historyList" styleClass="p-datatable-gridlines p-datatable-xl"
+    selectionMode="single" [rows]="7" [paginator]="true"
+    [globalFilterFields]="['employeeCode', 'employeeName', 'departmentName', 'requestDate', 'backDate']">
+    <ng-template pTemplate="caption">
+        <span class="p-input-icon-right p-ml-auto">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" class="p-inputtext-sm"
+                (input)="listTb.filterGlobal($event.target.value, 'contains')" placeholder="Từ khóa" />
+        </span>
+    </ng-template>
+    <ng-template pTemplate="colgroup" let-column>
+        <colgroup>
+            <col *ngFor="let col of column" [style.width]="col.width">
+        </colgroup>
+    </ng-template>
+    <ng-template pTemplate="header" let-column>
+        <tr>
+            <th *ngFor="let col of column">{{col.header}}</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-time let-columns="columns">
+        <tr>
+            <td *ngFor="let col of columns">
+                <label *ngIf="col.field!=='requestDate' && col.field!=='backDate'">{{time[col.field]}}</label>
+                <span *ngIf="col.field==='requestDate'">
+                    <label *ngIf="!time['editReqDateFlag']"
+                        (click)="editHistory(time, DATE_TYPE.REQUEST)">{{time[col.field]}}</label>
+                    <p-calendar *ngIf="time['editReqDateFlag']" (onBlur)="submitEditedHistory(time, 'requestDate')"
+                        [showIcon]="true" dataType="string" appendTo="body" [(ngModel)]="time[col.field]"
+                        dateFormat="dd-mm-yy"></p-calendar>
+                </span>
+                <span *ngIf="col.field==='backDate'">
+                    <label *ngIf="!time['editBackDateFlag']"
+                        (click)="editHistory(time, DATE_TYPE.BACK)">{{time[col.field]}}</label>
+                    <p-calendar *ngIf="time['editBackDateFlag']" (onBlur)="submitEditedHistory(time, 'backDate')"
+                        [showIcon]="true" dataType="string" appendTo="body" [(ngModel)]="time[col.field]"
+                        dateFormat="dd-mm-yy"></p-calendar>
+                </span>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="7">Thiết bị chưa được sử dụng</td>
+        </tr>
+    </ng-template>
+</p-table>

@@ -1,0 +1,135 @@
+<div class="body-history-edit">
+  <div class="edit-history">
+    <div class="search-emplyee flex" *ngIf="showCheck">
+      <div class="input-search col-9">
+        <!-- <input
+          class="custom-tb-search"
+          type="text"
+          placeholder="Nhập mã,tên nhân viên"
+          [(ngModel)]="keyCheck"
+          [maxLength]="30"
+          pInputText
+        /> -->
+        <p-autoComplete
+          class="custom-tb-search"
+          [maxLength]="30"
+          type="text"
+          placeholder="Nhập mã,tên nhân viên"
+          [(ngModel)]="keyCheck"
+          (onSelect)="checkEmployee()"
+          [showEmptyMessage]="true"
+          [suggestions]="filteredEmployee"
+          (completeMethod)="filterEmployee($event)"
+          [minLength]="1"
+        ></p-autoComplete>
+      </div>
+
+      <div class="btn-search align-items-center">
+        <button
+          pButton
+          pRipple
+          type="button"
+          label="Kiểm tra"
+          (click)="checkEmployee()"
+          class="p-button-outlined"
+        ></button>
+      </div>
+    </div>
+    <table class="form-edit-history" [formGroup]="formData">
+      <tr>
+        <td class="title-edit-history">Tên Nhân Viên</td>
+        <td>
+          <input
+            class="custom-tb"
+            type="text"
+            [maxLength]="30"
+            pInputText
+            readonly
+            name="name"
+            formControlName="name"
+            [ngClass]="{
+              'ng-dirty': isSubmited && f.name.errors
+            }"
+          />
+          <div *ngIf="isSubmited && f.name.errors" class="p-error mx-2">
+            {{ mes.MES_7 }}
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="title-edit-history">Ngày Bắt Đầu</td>
+        <td>
+          <p-calendar
+            [style]="{ width: '50%' }"
+            [showIcon]="true"
+            formControlName="timeStart"
+            dateFormat="dd-mm-yy"
+            placeholder="dd-mm-yyyy"
+            dataType="string"
+            name="timeStart"
+            inputId="icon"
+            [ngClass]="{
+              'ng-dirty': isSubmited && f.timeStart.errors
+            }"
+          >
+          </p-calendar>
+          <div *ngIf="isSubmited && f.timeStart.errors" class="p-error mx-2">
+            {{ mes.MES_7 }}
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="title-edit-history">Ngày Kết Thúc</td>
+        <td>
+          <p-calendar
+            [style]="{ width: '50%' }"
+            [showIcon]="true"
+            formControlName="timeEnd"
+            dateFormat="dd-mm-yy"
+            placeholder="dd-mm-yyyy"
+            dataType="string"
+            name="timeEnd"
+            inputId="icon"
+            [ngClass]="{
+              'ng-dirty': isSubmited && f.timeEnd.errors
+            }"
+          >
+          </p-calendar>
+          <div *ngIf="isSubmited && f.timeEnd.errors" class="p-error mx-2">
+            {{ mes.MES_7 }}
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="title-edit-history">Vai Trò</td>
+        <td>
+          <input
+            class="custom-tb"
+            type="text"
+            [maxLength]="30"
+            pInputText
+            formControlName="role"
+            name="role"
+            [ngClass]="{
+              'ng-dirty': isSubmited && f.role.errors
+            }"
+          />
+          <div *ngIf="isSubmited && f.role.errors" class="p-error mx-2">
+            {{ mes.MES_7 }}
+          </div>
+        </td>
+      </tr>
+    </table>
+    <div class="btn-edit-history">
+      <button
+        pButton
+        pRipple
+        type="button"
+        label="Lưu"
+        (click)="saveProject()"
+        class="p-button-outlined"
+      ></button>
+    </div>
+  </div>
+</div>
+<p-toast position="top-right"></p-toast>

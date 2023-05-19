@@ -1,0 +1,21 @@
+<div class="card border-0">
+    <p-tabView>
+        <p-tabPanel *ngIf="isHr" header="Danh sách đăng ký" leftIcon="bx bx-list-check">
+            <app-employee-register-list></app-employee-register-list>
+        </p-tabPanel>
+        <p-tabPanel header="{{isHr?'Thiết bị sở hữu': 'Danh sách thiết bị sở hữu'}}"
+            leftIcon="bx bx-list-ul">
+            <app-owned-equipment-list [ownedEquipmentCols]="ownedEquipmentCols" [mobileScreen]="mobileScreen"
+                [ownedEquipmentList]="ownedEquipmentList" [tableRows]="tableRows"></app-owned-equipment-list>
+        </p-tabPanel>
+        <p-tabPanel header="{{isHr?'Đăng ký':'Đăng ký thiết bị'}}" leftIcon="bx bx-list-plus">
+            <app-equipment-register [registrationCols]="registrationCols" [mobileScreen]="mobileScreen"
+                [registrationList]="registrationList" [tableRows]="tableRows"
+                (registerEndEvent)="getUserRegistrationList()"></app-equipment-register>
+        </p-tabPanel>
+    </p-tabView>
+</div>
+<!-- *** confirm dialog *** -->
+<p-confirmDialog header="Xác Nhận" icon="pi pi-exclamation-triangle" baseZIndex="2"></p-confirmDialog>
+<!--  -->
+<p-toast></p-toast>

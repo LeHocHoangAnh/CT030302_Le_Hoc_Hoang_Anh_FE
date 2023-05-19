@@ -1,0 +1,39 @@
+<div class="form-role-edit">
+  <div class="class-btn-edit">
+    <button class="btn btn-outline-info" (click)="editItem(null)">
+      Thêm mới
+    </button>
+  </div>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col" style="width: 5%">ID</th>
+        <th scope="col" style="width: 90%">Tên quyền</th>
+        <th scope="col" style="width: 5%"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of listData">
+        <td class="click-row" (click)="editItem(data)">
+          {{ data.id }}
+        </td>
+        <td>{{ data.roleName }}</td>
+        <td style="text-align: center">
+          <i
+            class="bx bx-x"
+            style="font-size: 30px"
+            (click)="confirm('top',data.id)"
+          ></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<p-toast position="top-right"></p-toast>
+<p-confirmDialog #cd [style]="{width: '20vw'}" key="positionDialog" [position]="position"
+rejectButtonStyleClass="p-button-outlined">
+<ng-template pTemplate="footer">
+  <button type="button" pButton (click)="cd.accept()" [style]="{width: '80px'}"></button>
+  <button type="button" class="cancel-button" pButton (click)="cd.reject()"></button>
+</ng-template>
+</p-confirmDialog>

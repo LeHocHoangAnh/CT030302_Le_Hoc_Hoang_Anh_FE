@@ -1,0 +1,30 @@
+@media(max-width: 768px) {
+    * {
+        font-size: 3.4vw;
+    }
+}
+
+:host ::ng-deep .p-calendar {
+  height: 30px !important;
+}
+
+:host ::ng-deep .p-datepicker {
+  padding: 0px !important;
+}
+
+:host ::ng-deep .p-datepicker .p-datepicker-header {
+  padding: 0.25rem !important;
+}
+
+:host ::ng-deep .p-datepicker table th {
+  padding: 0.25rem !important;
+}
+
+:host ::ng-deep .p-datepicker table td {
+  padding: 0.25rem !important;
+}
+
+:host ::ng-deep .p-datepicker table td>span {
+  width: 2rem !important;
+  height: 2rem !important;
+}

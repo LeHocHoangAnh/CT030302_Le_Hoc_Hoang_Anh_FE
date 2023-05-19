@@ -1,0 +1,19 @@
+<div ngbDropdown class="d-inline-block pr-3">
+  <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
+    <span class="flex flex-row align-items-center">
+      <img [src]="image" *ngIf="image !== null">
+      <i class="bx bxs-user-circle" *ngIf="image === null"></i>
+      <div class="hidden sm:block ml-2">
+        <div class="flex flex-column" style="cursor:pointer; text-align: start;">
+          <div style="font-size:0.75rem">{{dataProvider?.fullName}}</div>
+          <div style="font-size:0.75rem">{{dataProvider?.departmentName}}</div>
+        </div>
+      </div>
+    </span>
+  </button>
+  <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop-menu">
+    <button ngbDropdownItem routerLink="/home"><i style="font-size:1rem" class="pi pi-user mr-4"></i>Cá Nhân</button>
+    <button (click)="logout()" ngbDropdownItem><i style="font-size:1rem" class="pi pi-sign-out mr-4"></i>Đăng Xuất</button>
+    <!-- <button ngbDropdownItem routerLink="/role-list">Quyền Truy Cập</button> -->
+  </div>
+</div>

@@ -1,0 +1,310 @@
+<div class="container-approve">
+  <div class="approve-header grid mx-0 w-full">
+    <div class="col-12">
+      <button *ngIf="aggregateMode" pButton pRipple type="button" (click)="exportAggregateData()"
+        icon="pi pi-file-excel" label="Xuất Excel" class="p-button-success excel-btn p-button-sm xl:p-button-lg"
+        style="float:right"></button>
+    </div>
+    <div *ngIf="!mobileScreen"
+      class="standard-flex-row flex-wrap align-items-center justify-content-center w-full mt-2 -mb-2">
+      <div *ngIf="!aggregateMode" class="approve-time flex flex-column flex-wrap mr-2 text-base"
+        [formGroup]="searchForm">
+        <table class="search-form-table">
+          <tr>
+            <td class="label-column"><label>Từ Ngày</label></td>
+            <td>
+              <p-calendar id="from-date-input" formControlName="fromDate" [showIcon]="true" [showOnFocus]="false"
+                dateFormat="dd/mm/yy" placeholder="Từ Ngày" [showButtonBar]="true">
+              </p-calendar>
+            </td>
+            <td class="label-column"><label>Đến Ngày</label></td>
+            <td>
+              <p-calendar id="to-date-input" formControlName="toDate" [showIcon]="true" [showOnFocus]="false"
+                dateFormat="dd/mm/yy" placeholder="Đến Ngày" [showButtonBar]="true">
+              </p-calendar>
+            </td>
+            <td class="label-column"><label>Loại Yêu Cầu</label></td>
+            <td class="flex flex-row align-items-center">
+              <div class="col-7 p-0">
+                <p-dropdown styleClass="w-full" [showClear]="true" [options]="listStatus" placeholder="Yêu Cầu"
+                  formControlName="status" optionLabel="name" optionValue="value"></p-dropdown>
+              </div>
+              <div *ngIf="isManager==true" class="field-checkbox col-5 justify-content-end">
+                <input class="w-2rem h-2rem" type="checkbox" id="flagAllBooking" formControlName="flagAllBooking" />
+                <label class="label-column" for="flagAllBooking">Đơn tới bạn</label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="py-1"></td>
+          </tr>
+          <tr>
+            <td class="label-column"><label>Tên NV</label></td>
+            <td><input type="text" class="w-full" (keyup.enter)="onSearch()" [maxLength]="50" pInputText
+                formControlName="name" /></td>
+            <td class="label-column"><label>Phòng Ban</label></td>
+            <td>
+              <p-dropdown styleClass="w-full" [showClear]="true" [options]="listDepartment" placeholder="Chọn phòng ban"
+                formControlName="department" optionLabel="name" optionValue="name">
+              </p-dropdown>
+            </td>
+            <td class="label-column"><label>Trạng Thái</label>
+            </td>
+            <td>
+              <div class="card p-2 flex flex-row">
+                <div class="field-checkbox mr-2">
+                  <input class="w-2rem h-2rem lg:w-1rem lg:h-1rem" type="checkbox" id="wait" formControlName="wait" />
+                  <label for="wait">Chờ Xác Nhận</label>
+                </div>
+                <div class="field-checkbox mr-2">
+                  <input class="w-2rem h-2rem lg:w-1rem lg:h-1rem" type="checkbox" id="approve"
+                    formControlName="approve" />
+                  <label for="approve">Xác Nhận</label>
+                </div>
+                <div class="field-checkbox">
+                  <input class="w-2rem h-2rem lg:w-1rem lg:h-1rem" type="checkbox" id="refuse"
+                    formControlName="refuse" />
+                  <label for="refuse">Từ Chối</label>
+                </div>
+                <div class="field-checkbox  ml-2">
+                  <input class="w-2rem h-2rem lg:w-1rem lg:h-1rem" type="checkbox" id="delete"
+                    formControlName="deleteFlag" />
+                  <label for="delete">Đã Xoá</label>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div *ngIf="aggregateMode" class="approve-time flex flex-row align-items-center mr-2"
+        [formGroup]="searchAggreForm">
+        <div class="standard-flex-row">
+          <label class="standard-label">Thời Gian</label>
+          <p-calendar id="from-date-input" formControlName="timeYear" [showIcon]="true" [showOnFocus]="false"
+            dateFormat="mm/yy" placeholder="Thời gian" view="month" (keyup.enter)="getAggregateData()">
+          </p-calendar>
+        </div>
+        <div class="standard-flex-row ml-2">
+          <label class="standard-label">Tên Nhân Viên</label>
+          <input type="text" [maxLength]="50" pInputText (keyup.enter)="getAggregateData()"
+            formControlName="fullName" />
+        </div>
+        <div class="standard-flex-row ml-2">
+          <label class="standard-label">Mã Nhân Viên</label>
+          <input type="text" [maxLength]="50" pInputText (keyup.enter)="getAggregateData()"
+            formControlName="employeeCode" />
+        </div>
+      </div>
+      <div class="ml-5 flex justify-content-around align-items-center">
+        <button pButton appDebounceClick label="Tìm Kiếm" (click)="onSearch()" class="search-btn mr-2"
+          icon="pi pi-search" type="button"></button>
+        <!-- <mat-slide-toggle *ngIf="!isLeader" [(ngModel)]="aggregateMode" color="primary" class="slide-toggle-custom"
+          (change)="toggleAction()">Tổng Hợp</mat-slide-toggle> -->
+      </div>
+    </div>
+    <div class="approve-body col-12">
+      <div *ngIf="aggregateMode" class="aggregate-table mt-4 col-12">
+        <div class="paginator-top ">
+          <div class="ml-2 text-lg font-medium">
+            Số bản ghi: {{recordStart}}-{{recordEnd}} (Tổng số {{totalRecord}})
+          </div>
+          <div>
+            <p-paginator *ngIf="!mobileScreen" [rows]="pageSize" [totalRecords]="totalRecord"
+              [pageLinkSize]="pageLinkSize" (onPageChange)="pageClick($event)" #paginator>
+            </p-paginator>
+          </div>
+        </div>
+        <p-table [columns]="aggreCols" [frozenColumns]="aggreFrozenColumns" [value]="aggregateDataList"
+          [scrollable]="true" frozenWidth="35vw" [style.height.px]="100"
+          styleClass="p-datatable-gridlines p-datatable-xl">
+          <ng-template pTemplate="colgroup" let-columns>
+            <colgroup>
+              <col *ngFor="let col of columns" [style.width.vw]="col.width">
+            </colgroup>
+          </ng-template>
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th id="th-title" *ngFor="let col of columns">
+                {{ col.header }}
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-time let-columns="columns">
+            <tr>
+              <td style="text-align: center" *ngFor="let col of columns">
+                <div *ngIf="col.frozen" [style.font-weight]="col.frozen?500:400">
+                  {{time[col.field]}}
+                </div>
+                <div *ngIf="!col.frozen" [style.font-weight]="col.frozen?500:400">
+                  {{time.detailTimeKeeping[col.field]}}
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+    <div class="approve-body" *ngIf="!aggregateMode">
+      <div class="paginator-top mb-2">
+        <div class="flex flex-row align-items-center px-1 justify-content-between"
+          [style.width]="mobileScreen?'100%':''">
+          <span>
+            <button pButton pRipple type="button" (click)="batchApprover=!batchApprover" label="Duyệt Nhiều Đơn"
+              class="p-button-outlined mr-1"></button>
+            <span *ngIf="batchApprover">
+              <button pButton pRipple type="button" (click)="cancelMultipleSelected()" icon="pi pi-times"
+                class="p-button-outlined p-button-rounded p-button-danger mr-1"></button>
+              <button pButton pRipple type="button" (click)="showMultipleSelected(selectedAlls)" icon="pi pi-check"
+                class="p-button-outlined p-button-rounded mr-1"></button>
+            </span>
+          </span>
+          <span *ngIf="mobileScreen">
+            <button pButton appDebounceClick (click)="searchDialog=true" class="search-btn mr-2 p-button-outlined"
+              icon="pi pi-search" type="button"></button>
+          </span>
+          <label *ngIf="!mobileScreen" class="text-lg font-medium">Số bản ghi: {{recordStart}}-{{recordEnd}} (Tổng số
+            {{totalRecord}})</label>
+        </div>
+        <div>
+          <p-paginator *ngIf="!mobileScreen" [rows]="pageSize" [totalRecords]="totalRecord"
+            [pageLinkSize]="pageLinkSize" (onPageChange)="pageClick($event)" #paginator>
+          </p-paginator>
+        </div>
+      </div>
+      <p-table [columns]="cols" class="table-data" [value]="listBooking" scrollHeight="70vh"
+        [style]="{'width': (mobileScreen?(screenWidth+'px'):'100%')}" styleClass="p-datatable-gridlines p-datatable-xl"
+        responsiveLayout="scroll" [scrollable]="mobileScreen" scrollDirection="both">
+        <ng-template pTemplate="colgroup" let-columns>
+          <colgroup>
+            <col *ngIf="batchApprover" style="width: 10vh" />
+            <col *ngIf="!batchApprover" style="width: 10vh" />
+            <col *ngFor="let col of columns" [style.width]="col.width" />
+          </colgroup>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <td *ngIf="batchApprover" style="text-align: center">
+              <p-checkbox name="groupname" [value]="curentPage" [(ngModel)]="page" (onChange)="selectedAllBooking()">
+              </p-checkbox>
+            </td>
+            <th *ngIf="!batchApprover" id="th-title">Duyệt</th>
+            <th id="th-title" *ngFor="let col of columns">
+              {{ col.header }}
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-data>
+          <tr>
+            <td *ngIf="batchApprover" style="text-align: center">
+              <p-checkbox [style.padding]="mobileScreen?'0.45rem':'0.5rem'" name="groupname" [value]="data.id"
+                [(ngModel)]="selectedAlls" (onChange)="onCheckBox()">
+              </p-checkbox>
+            </td>
+            <td *ngIf="!batchApprover" style="text-align: center">
+              <button pButton pRipple type="button" (click)="show(data.id)" icon="pi pi-pencil"
+                class="p-button-rounded p-button-sm p-button-text p-button-info btn-delete"></button>
+            </td>
+            <td style="text-align: center">{{ data.fullName }}</td>
+            <td style="text-align: center">{{ data.departmentName }}</td>
+            <td style="text-align: center; text-overflow: ellipsis; overflow: hidden;">{{ data.status }}</td>
+            <td style="text-align: center">{{ data.requestDay }}</td>
+            <td style="text-align: center">
+              <div class="reason">{{ data.reason }}</div>
+            </td>
+            <td *ngIf="!mobileScreen && data.deleteFlag==true" style="text-align: center">
+              Đã xoá
+            </td>
+            <td *ngIf="data.deleteFlag==false" style="text-align: center">{{ data.confirm }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <div *ngIf="mobileScreen" class="flex flex-row justify-content-between pl-2 align-items-center">
+        <label class="text-lg font-medium">{{recordStart}}-{{recordEnd}} (Tổng số {{totalRecord}})</label>
+        <p-paginator [rows]="pageSize" [totalRecords]="totalRecord" [pageLinkSize]="pageLinkSize"
+          (onPageChange)="pageClick($event)" #paginator>
+        </p-paginator>
+      </div>
+    </div>
+  </div>
+  <!-- *** search dialog *** -->
+  <p-dialog [(visible)]="searchDialog" [modal]="true" header="Cửa Sổ Tìm Kiếm" [style]="{'width': '95%'}">
+    <div *ngIf="!aggregateMode" class="mobile-approve-time flex-wrap pl-3 pt-2 text-base" [formGroup]="searchForm">
+      <div class="w-full">
+        <div class="grid w-full">
+          <div class="col-4"><label>Từ Ngày</label></div>
+          <div class="col-8">
+            <p-calendar id="from-date-input" formControlName="fromDate" [showIcon]="true" [showOnFocus]="false"
+              dateFormat="dd/mm/yy" placeholder="Từ Ngày" [showButtonBar]="true" [style]="{'width':'100%'}">
+            </p-calendar>
+          </div>
+        </div>
+        <div class="grid w-full">
+          <div class="label-column col-4"><label>Đến Ngày</label></div>
+          <div class="col-8">
+            <p-calendar id="to-date-input" formControlName="toDate" [showIcon]="true" [showOnFocus]="false"
+              dateFormat="dd/mm/yy" placeholder="Đến Ngày" [showButtonBar]="true" [style]="{'width':'100%'}">
+            </p-calendar>
+          </div>
+        </div>
+        <div class="grid w-full">
+          <div class="label-column col-4"><label>Loại Yêu Cầu</label></div>
+          <div class="col-8">
+            <p-dropdown styleClass="w-full" [showClear]="true" [options]="listStatus" placeholder="Yêu Cầu"
+              formControlName="status" optionLabel="name" optionValue="value"></p-dropdown>
+          </div>
+        </div>
+        <div class="grid w-full">
+          <div class="label-column col-4"><label>Tên NV</label></div>
+          <div class="col-8"><input type="text" class="w-full" (keyup.enter)="onSearch()" [maxLength]="50" pInputText
+              formControlName="name" /></div>
+        </div>
+        <div class="grid w-full">
+          <div class="label-column col-4"><label>Phòng Ban</label></div>
+          <div class="col-8">
+            <p-dropdown styleClass="w-full" [showClear]="true" [options]="listDepartment" placeholder="Chọn phòng ban"
+              formControlName="department" optionLabel="name" optionValue="name">
+            </p-dropdown>
+          </div>
+        </div>
+        <div *ngIf="isManager==true" class="grid w-full">
+          <div class="col-4"><label class="label-column" for="flagAllBooking">Đơn tới bạn</label></div>
+          <div class="col-8"><input class="w-2rem h-2rem" type="checkbox" id="flagAllBooking"
+              formControlName="flagAllBooking" /></div>
+        </div>
+        <div class="grid w-full">
+          <div class="label-column col-4"><label>Trạng Thái</label></div>
+          <div class="col-12">
+            <div class="card p-2 flex flex-row">
+              <div class="field-checkbox">
+                <input class="w-2rem h-2rem lg:w-1rem lg:h-1rem" type="checkbox" id="wait" formControlName="wait" />
+                <label style="font-size:3vw" for="wait">Chờ Xác Nhận</label>
+              </div>
+              <div class="field-checkbox">
+                <input class="w-2rem h-2rem lg:w-1rem lg:h-1rem" type="checkbox" id="approve"
+                  formControlName="approve" />
+                <label style="font-size:3vw" for="approve">Xác Nhận</label>
+              </div>
+              <div class="field-checkbox">
+                <input class="w-2rem h-2rem lg:w-1rem lg:h-1rem" type="checkbox" id="refuse" formControlName="refuse" />
+                <label style="font-size:3vw" for="refuse">Từ Chối</label>
+              </div>
+              <div class="field-checkbox">
+                <input class="w-2rem h-2rem lg:w-1rem lg:h-1rem" type="checkbox" id="delete"
+                  formControlName="deleteFlag" />
+                <label style="font-size:3vw" for="delete">Đã Xoá</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w-full mt-4" style="text-align:right">
+          <p-button pRipple icon="pi pi-search" class="p-button-rounded p-button-outlined mr-3" label="Tìm Kiếm"
+            (click)="onSearch();searchDialog=false">
+          </p-button>
+        </div>
+      </div>
+    </div>
+  </p-dialog>
+  <!-- end -->
+  <div>
+    <p-toast position="top-right"></p-toast>
+  </div>

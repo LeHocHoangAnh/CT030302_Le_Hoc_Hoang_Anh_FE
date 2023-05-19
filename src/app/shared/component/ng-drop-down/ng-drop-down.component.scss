@@ -1,0 +1,27 @@
+.d-inline-block i{
+  font-size: 40px;
+}
+
+.d-inline-block .btn-profile {
+  border: none;
+  font-size: 20px;
+  color: #888888;
+  background: none;
+}
+
+.d-inline-block .drop-menu {
+  min-width: 5rem;
+}
+img {
+  border-radius: 50%;
+  height: 4vh;
+  width: 4vh;
+  object-fit:cover;
+  // margin-right: 12px;
+  // margin-left: 17px;
+  -webkit-border-radius: 50%
+}
+
+:host ::ng-deep .dropdown-toggle::after{
+  display:none;
+}

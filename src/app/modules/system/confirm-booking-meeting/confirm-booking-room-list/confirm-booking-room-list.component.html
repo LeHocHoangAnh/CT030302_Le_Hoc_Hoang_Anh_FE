@@ -1,0 +1,110 @@
+<div class="container-approve">
+    <div class="approve-header grid w-full" [formGroup]="searchForm">
+      <div class="approve-time flex flex-row align-items-center justify-content-center col-12">
+        <div class="select-time block mr-2">
+          <label class="standard-label">Thời Gian</label>
+          <p-calendar formControlName="time" view="month" dateFormat="mm/yy" [readonlyInput]="true" inputId="monthpicker"></p-calendar>
+        </div>
+         <div class="input-name mr-2">
+          <label class="standard-label">Tên NV</label>
+          <input type="text" [maxLength]="50" (keyup.enter)="onSearch()" pInputText formControlName="name"/>
+        </div>
+        <div class="input-name mr-4">
+          <label class="standard-label">Phòng họp</label>
+          <p-dropdown
+          [options]="listRoom"
+          [showClear]="true"
+          optionLabel="name"
+          optionValue="id"
+          formControlName="roomId"
+          placeholder="Chọn phòng họp"
+          ></p-dropdown>
+        </div>
+          <div class="btn-search">
+            <button
+              pButton
+              appDebounceClick
+              label="Tìm kiếm"
+              (click)="onSearch()"
+              class="search-btn"
+              icon="pi pi-search"
+              type="button"
+            ></button>
+          </div>
+        </div>
+        <div class="col-12 flex justify-content-center align-items-center">
+          <label class="standard-label">Trạng Thái</label>
+          <div class="formgroup-inline card p-2 pr-0 flex flex-row justify-content-center">
+            <div class="field-checkbox">
+                <input class="w-2rem h-2rem lg:w-1rem lg:h-1rem" type="checkbox" id="wait" formControlName="wait">
+                <label for="wait">Chờ Xác Nhận</label>
+            </div>
+            <div class="field-checkbox">
+                <input class="w-2rem h-2rem lg:w-1rem lg:h-1rem" type="checkbox" id="approve" formControlName="approve">
+                <label for="approve">Xác Nhận</label>
+            </div>
+            <div class="field-checkbox">
+              <input class="w-2rem h-2rem lg:w-1rem lg:h-1rem" type="checkbox" id="refuse" formControlName="refuse">
+              <label for="refuse">Từ Chối</label>
+          </div>
+        </div>
+        </div>
+    </div>
+    <div class="approve-body">
+      <div class="paginator-top">
+            <p-paginator [rows]="pageSize" [totalRecords]="totalRecord" [pageLinkSize]="pageLinkSize"
+                (onPageChange)="pageClick($event)" #paginator>
+            </p-paginator>
+    </div>
+       <p-table
+        [columns]="cols"
+        class="table-data"
+        [value]="listBooking"
+        styleClass="p-datatable-gridlines p-datatable-xl"
+        selectionMode="single"
+        responsiveLayout="scroll"
+        [resizableColumns]="true"
+        [scrollable]="true"
+        scrollHeight="65vh"
+      >
+        <ng-template pTemplate="colgroup">
+          <colgroup>
+              <col style="width:15%">
+              <col style="width:15%">
+              <col style="width:25%">
+              <col style="width:15%">
+              <col style="width:15%">
+              <col style="width:10%">
+              <col style="width:5%">
+          </colgroup>
+      </ng-template>
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th id="th-title" *ngFor="let col of columns">
+              {{ col.header }}
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body"  let-data>
+          <tr [pSelectableRow]="data">
+            <td style="text-align: center">{{ data.employeeName }}</td>
+            <td style="text-align: center">{{ data.roomName }}</td>
+            <td style="text-align: center">{{ data.reason }}</td>
+            <td style="text-align: center">{{ data.timeStart }}</td>
+            <td style="text-align: center">{{ data.timeEnd }}</td>
+            <td style="text-align: center">{{ data.status }}</td>
+            <td style="text-align: center"><button
+              pButton
+              pRipple
+              type="button"
+              (click)="show(data.id,data.employeeName)"
+              icon="pi pi-pencil"
+              class="p-button-rounded p-button-text p-button-info btn-delete"
+            ></button></td>
+          </tr>
+      </ng-template>
+      </p-table>
+    </div>
+  </div>
+  <p-toast position="top-right"></p-toast>
+  

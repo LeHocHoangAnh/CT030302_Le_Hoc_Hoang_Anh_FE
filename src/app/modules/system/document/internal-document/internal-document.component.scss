@@ -1,0 +1,9 @@
+:host ::ng-deep .p-dialog{
+    .p-dialog {
+      max-height: 100%;
+    }
+}
+
+:host ::ng-deep .ui-dynamicdialog{
+    max-height: 100%;
+}

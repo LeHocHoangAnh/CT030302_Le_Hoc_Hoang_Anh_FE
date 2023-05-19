@@ -1,0 +1,219 @@
+<!-- *** web view -->
+<div class="body-list-employee">
+  <!-- end -->
+  <!-- FormGroup for search -->
+  <div class="grid w-full justify-content-around mb-2" [formGroup]="searchForm">
+    <div class="hidden md:flex flex-row px-0 md:col-2">
+      <button pButton pRipple type="button" (click)="switchInWorking(true)" [label]="mobileScreen?'':'Đang làm việc'"
+        icon="pi pi-users" id="butonColor" class="left-0 mr-2 " [ngClass]="{'active': active}"></button>
+      <button pButton pRipple type="button" (click)="switchInWorking(false)" [label]="mobileScreen?'':'Đã nghỉ việc'"
+        id="butonColor" icon="pi pi-user-minus" class="" [ngClass]="{'active': !active}"></button>
+    </div>
+    <div class="grid col-6 md:col-2">
+      <span class="col-4 md:text-right">
+        <label>Phòng ban</label>
+      </span>
+      <span class="col-8">
+        <p-dropdown [options]="department" placeholder=" Phòng ban" [style]="{'width': '100%'}" optionLabel="name"
+          [showClear]="true" formControlName="department"></p-dropdown>
+      </span>
+    </div>
+    <div class="grid col-6 md:col-2">
+      <span class="col-4 md:text-right">
+        <label>Hợp đồng</label>
+      </span>
+      <span class="col-8">
+        <p-dropdown [options]="ctr" placeholder="Hợp đồng" [style]="{'width': '100%'}" optionLabel="name"
+          [showClear]="true" optionValue="id" formControlName="contract"></p-dropdown>
+      </span>
+    </div>
+    <div class="grid col-6 md:col-2">
+      <span class="col-4 md:text-right">
+        <label>Công việc</label>
+      </span>
+      <span class="col-8 relative">
+        <input type="text" (keyup.enter)="onSearch()" style="width: 100%" [maxLength]="50" pInputText
+          formControlName="position" />
+      </span>
+    </div>
+    <div class="field-view flex flex-row align-items-center col-6 md:col-2">
+      <span class="col-4 md:text-right">
+        <label>Từ khóa</label>
+      </span>
+      <span class="col-8">
+        <input pInputText (keyup.enter)="onSearch()" style="width: 100%" type="text" [maxLength]="50" pInputText
+          formControlName="key" />
+      </span>
+    </div>
+    <span class="md:col-1">
+      <button pButton pRipple type="button" icon="pi pi-search" (click)="onSearch()" label="Tìm Kiếm"
+        class="p-button-sm xl:p-button-lg"></button>
+    </span>
+  </div>
+  <!-- end -->
+  <!-- Laptop/PC paginator -->
+  <div [style.display]="mobileScreen?'none':'flex'" class="col-12 px-2 create-and-page">
+    <div class="flex align-items-center">
+      <button *ngIf="!isLeader" routerLink="/employee/edit" pButton pRipple icon="pi pi-plus" type="button"
+        label="Thêm mới" class="p-button-sm xl:p-button-lg mr-1"></button>
+      <div class="totalemployees text-medium">
+        {{ recordStart }}-{{ recordEnd }} (Tổng số {{ totalRecord }})
+      </div>
+    </div>
+    <div class="flex flex-row align-items-center">
+      <div *ngIf="isLeader" class=""></div>
+      <div class="page-from">
+        <p-paginator [rows]="pageSize" [totalRecords]="totalRecord" [pageLinkSize]="pageLinkSize"
+          (onPageChange)="pageClick($event)" #paginator>
+        </p-paginator>
+      </div>
+      <button pButton pRipple type="button" label="Xuất Excel"
+        class="mr-1 p-button-success excel-btn p-button-sm xl:p-button-lg"
+        (click)="excelFlag=true;pickUpListExcel.toggle($event)" icon="pi pi-file-excel "></button>
+    </div>
+  </div>
+  <!-- end -->
+  <!-- employee table -->
+  <p-table [columns]="columns" [value]="employees" [style]="{'width': (mobileScreen?(screenWidth+'px'):'100%')}"
+    [scrollable]="mobileScreen" scrollDirection="both"
+    styleClass="p-datatable-gridlines p-datatable-striped p-datatable-sm" [resizableColumns]="true">
+    <ng-template *ngIf="mobileScreen" pTemplate="caption">
+      <div class="w-full flex flex-row align-items-center justify-content-between">
+        <div>
+          <button *ngIf="!isLeader" routerLink="/employee/edit" pButton pRipple icon="pi pi-plus" type="button"
+            label="Thêm mới" class="p-button-sm xl:p-button-lg mr-1"></button>
+        </div>
+        <div class="flex flex-row align-items-center">
+          <button pButton pRipple type="button" (click)="switchInWorking(true)" icon="pi pi-users" id="butonColor"
+            class="left-0 mr-2 " [ngClass]="{'active': active}"></button>
+          <button pButton pRipple type="button" (click)="switchInWorking(false)" id="butonColor" icon="pi pi-user-minus"
+            class="" [ngClass]="{'active': !active}"></button>
+          <i class='pi pi-ellipsis-v px-2'></i>
+          <button pButton pRipple type="button" class="mr-1 p-button-success excel-btn p-button-sm xl:p-button-lg"
+            (click)="exportExcel(true)" icon="pi pi-file-excel "></button>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="colgroup" let-columns>
+      <colgroup>
+        <col *ngIf="excelFlag" [style.width]="mobileScreen?'5vh':'5%'" />
+        <col *ngFor="let col of columns" [style.width]="col.width" />
+      </colgroup>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th *ngIf="excelFlag" (click)="addAllToExcelList()" style="text-align: center;cursor: pointer; color:green">
+          <i class="pi pi-plus-circle"></i>
+        </th>
+        <th *ngFor="let col of columns" style="text-align: center">
+          {{ col.header }}
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-employee>
+      <tr [pSelectableRow]="employee">
+        <td *ngIf="excelFlag" style="text-align: center; color: green; cursor: pointer;"
+          (click)="addToExcelList(employee, $event, pickUpListExcel)">
+          <i class="pi pi-plus-circle"></i>
+        </td>
+        <td style="text-align: center">
+          <button pButton pRipple type="button" [icon]="isLeader?'pi pi-bars':'pi pi-pencil'"
+            (click)="gotoEdit(employee.id)" class="p-button-rounded p-button-text p-button-info btn-delete"></button>
+        </td>
+        <td style="text-align: center">{{ employee.employeeCode }}</td>
+        <td style="text-align: center">{{ employee.fullName }}</td>
+        <td style="text-align: center">{{ employee.email }}</td>
+        <td style="text-align: center">{{ employee.gender }}</td>
+        <td style="text-align: center">{{ employee.typeContract }}</td>
+        <td style="text-align: center">{{ this.calculateSeniority(employee.dateEntry)}}</td>
+        <td style="text-align: center">{{ employee.phoneNumber }}</td>
+        <td style="text-align: center">{{ employee.dateOfBirth }}</td>
+        <td style="text-align: center">{{ employee.departmentName }}</td>
+        <td style="text-align: center">{{ employee.position? employee.position: 'Khác'}}</td>
+        <td *ngIf="!isLeader" style="text-align: center">
+          <button pButton pRipple type="button" icon="pi pi-times" (click)="confirm('top', employee.id)"
+            class="p-button-rounded p-button-text p-button-danger btn-delete"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <!-- end -->
+  <!-- Mobile paginator -->
+  <div [style.display]="mobileScreen?'flex':'none'" class="col-12 create-and-page p-0 pl-2">
+    <div class="flex align-items-center">
+      <div class="totalemployees text-medium">
+        {{ recordStart }}-{{ recordEnd }} (Tổng số {{ totalRecord }})
+      </div>
+    </div>
+    <div class="flex flex-row align-items-center">
+      <div *ngIf="isLeader" class=""></div>
+      <div class="page-from">
+        <p-paginator [rows]="pageSize" [totalRecords]="totalRecord" [pageLinkSize]="pageLinkSize"
+          (onPageChange)="pageClick($event)" #paginator>
+        </p-paginator>
+      </div>
+    </div>
+  </div>
+  <!-- end -->
+</div>
+<!-- end web view *** -->
+
+<!-- *** dialog module -->
+<!-- confirm dialog -->
+<p-confirmDialog #cd [style]="{ width: '30vw' }" key="positionDialog" [position]="position"
+  rejectButtonStyleClass="p-button-outlined">
+  <ng-template pTemplate="footer">
+    <button type="button" class="succer-button" [style]="{ padding: '5px 10px' }" pButton
+      (click)="cd.accept()"></button>
+    <button type="button" class="cancel-button" pButton (click)="cd.reject()"></button>
+  </ng-template>
+</p-confirmDialog>
+<!-- to-excel list overlay -->
+<p-overlayPanel #pickUpListExcel styleClass="overlayPanelCustom" appendTo="body" [dismissable]="false">
+  <ng-template pTemplate>
+    <p-table responsiveLayout="stack" [columns]="excelTableHeader" [value]="excelList" [resizableColumns]="true"
+      [autoLayout]="true" scrollable="true" scrollHeight="30vh">
+      <ng-template pTemplate="colgroup">
+        <colgroup>
+          <col style="width: 20%" />
+          <col style="width: 40%" />
+          <col style="width: 40%" />
+          <col style="width: 10%" />
+        </colgroup>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of columns" style="text-align: center">
+            {{ col.header }}
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-employee>
+        <tr [pSelectableRow]="employee">
+          <td style="text-align: center">{{ employee.employeeCode }}</td>
+          <td style="text-align: center">{{ employee.fullName }}</td>
+          <td style="text-align: center">{{ employee.email }}</td>
+          <td *ngIf="!isLeader" style="text-align: center">
+            <button pButton pRipple type="button" icon="pi pi-times" (click)="removeFromExcelList(employee.id)"
+              class="p-button-rounded p-button-text p-button-danger btn-delete"></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <div class="flex flex-row align-items-center justify-content-between p-5">
+      <span>
+        <button pButton pRipple type="button" label="Xuất tất cả" (click)="exportExcel(true)"
+          class="mr-1 export-btn"></button>
+      </span>
+      <span>
+        <button pButton pRipple type="button" label="Hủy" (click)="cancelExcel($event, pickUpListExcel)"
+          class="mr-1 cancel-btn"></button>
+        <button pButton pRipple type="button" label="Xuất" (click)="exportExcel(false)"
+          class="mr-1 export-btn"></button>
+      </span>
+    </div>
+  </ng-template>
+</p-overlayPanel>
+<!-- toast -->
+<p-toast position="top-right"></p-toast>
+<!-- end *** -->

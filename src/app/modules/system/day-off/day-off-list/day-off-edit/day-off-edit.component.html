@@ -1,0 +1,36 @@
+<div class="card border-0">
+  <div id="input-field" [formGroup]="saveForm">
+    <div class="grid col-12 mt-3">
+      <div class="grid align-items-center col-12 py-0">
+        <label class="col-2">Từ ngày</label>
+        <div class="grid align-items-center justify-content-between col-10">
+          <div class="grid align-items-center" style="width: 48%;padding-left:0.87rem">
+            <p-calendar class="w-full" formControlName="dayFrom" showButtonBar="true" [showOtherMonths]="true"
+              dateFormat="dd/mm/yy" appendTo="body" baseZIndex="1" [ngClass]="{
+                  'ng-dirty': isSubmited && form.dayFrom.errors
+                }" required>
+            </p-calendar>
+          </div>
+          <label class="px-1" style="width: 4%">~</label>
+          <div class="grid align-items-center" style="width: 48%;">
+            <p-calendar class="w-full" formControlName="dayTo" showButtonBar="true" dateFormat="dd/mm/yy"
+              appendTo="body" baseZIndex="1" [ngClass]="{
+                  'ng-dirty': isSubmited && form.dayTo.errors
+                }" required>
+            </p-calendar>
+          </div>
+        </div>
+      </div>
+      <div class="grid flex-row align-items-center col-12 py-0">
+        <label class="col-2">Lý do</label>
+        <div class="col-10">
+          <textarea formControlName="reasonApply" pInputTextarea style="width:100%" [ngClass]="{
+                'ng-dirty': isSubmited && form.reasonApply.errors
+              }"></textarea>
+        </div>
+      </div>
+    </div>
+    <button pButton type="submit" label="Lưu" icon="pi pi-check" class="mt-2" (click)="saveDayOff()"
+      style="float: right"></button>
+  </div>
+</div>

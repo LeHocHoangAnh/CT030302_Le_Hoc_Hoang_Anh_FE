@@ -1,0 +1,101 @@
+@media(max-width: 768px){
+  *{
+    font-size: 3vw !important;
+  }
+}
+.container-accountant .accountant-header .accountant-time {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.container-accountant .accountant-header .accountant-time span {
+  margin-right: 5px;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.container-accountant .accountant-header {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+:host ::ng-deep .p-dropdown {
+  width: 12rem;
+}
+
+:host ::ng-deep .p-paginator {
+  justify-content: flex-end;
+}
+.paginator-top{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+:host ::ng-deep .p-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.form-search {
+  display: flex;
+  margin: 10px 0;
+}
+
+.form-search .input-name {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 20px;
+}
+
+.container-accountant .accountant-header .accountant-time .select-time {
+  display: flex;
+  align-items: center;
+}
+
+.search-btn {
+  font-weight: 500;
+}
+
+.btn-excel {
+  font-weight: 500;
+  align-items: center;
+}
+
+#th-title {
+  text-align: center;
+  padding: 5px;
+  white-space: inherit;
+}
+
+:host ::ng-deep .p-datatable {
+  @media(min-width:300px){
+    th{
+      height:23px;
+    }
+  } @media(min-width:500px){
+    th{
+      height:32px;
+    }
+  } 
+  @media(min-width:768px){
+    th{
+      height:62px;
+    }
+  } 
+  tr td{
+    padding: 0.7rem 0.7rem;
+  }
+  .p-button.p-button-icon-only.p-button-rounded{
+    height: 1.357rem;
+  }
+  .p-datatable-scrollable-wrapper {
+    display: flex;
+    flex-direction: row;
+
+    .p-datatable-scrollable-view.p-datatable-unfrozen-view {
+      position: initial;
+    }
+  }
+}

@@ -1,0 +1,44 @@
+.custom-tb {
+  width: 50%;
+}
+
+:host ::ng-deep .custom-tb-search span{
+  width: 85%;
+  display: inline;
+    input{
+      width: 80%;
+    }
+}
+
+.edit-history .form-edit-history{
+  width: 100%;
+  margin: 20px 0;
+}
+
+.edit-history .form-edit-history tr{
+  height: 80px;
+}
+
+.title-edit-history {
+  padding: 0.5rem;
+  width: 15%;
+}
+
+.search-emplyee{
+  text-align: center;
+  align-items: center;
+  margin: 30px 0;
+}
+
+
+:host ::ng-deep .body-history-edit {
+  .p-datepicker table td {
+    padding: 0;
+  }
+  .p-datepicker .p-timepicker button {
+    height: 1rem;
+  }
+  .p-datepicker table td > span {
+    height: 2rem;
+  }
+}

@@ -1,0 +1,7 @@
+label {
+    font-weight: 600;
+}
+
+:host ::ng-deep p-calendar>:first-child {
+    width: 100%;
+}

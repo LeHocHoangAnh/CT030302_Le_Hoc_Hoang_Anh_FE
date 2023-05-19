@@ -1,0 +1,95 @@
+<div class="card border-0 w-full">
+    <div class="grid justify-content-center w-full" [formGroup]="editForm">
+        <div *ngIf="isEdit" class="grid align-items-center col-12 md:col-10 mb-3">
+            <span class="col-5 md:col-4">
+                <label>Nhân Viên Sử Dụng</label>
+            </span>
+            <span class="col-7 md:col-8">
+                <label>{{editNameLabel}}</label>
+            </span>
+        </div>
+        <div class="grid align-items-center col-12 md:col-10">
+            <span class="col-5 md:col-4">
+                <label>Tên Thiết Bị</label>
+                <label class="kinda-important">{{notNull}}</label>
+            </span>
+            <span class="col-7 md:col-8">
+                <input placeholder="Nhập tên thiết bị" class="w-full" pInputText formControlName="name"
+                    [ngClass]="{'ng-dirty': isSubmitted && getControl.name.errors}" />
+            </span>
+        </div>
+        <div class="grid align-items-center col-12 md:col-10">
+            <span class="col-5 md:col-4">
+                <label>Số Seri</label>
+                <label class="kinda-important">{{notNull}}</label>
+            </span>
+            <span class="col-7 md:col-8">
+                <input placeholder="Nhập số seri" class="w-full" pInputText formControlName="serialNumber"
+                    [ngClass]="{'ng-dirty': isSubmitted && getControl.serialNumber.errors}" />
+            </span>
+        </div>
+        <div class="grid align-items-center col-12 md:col-10">
+            <span class="col-5 md:col-4">
+                <label>Loại Thiết Bị</label>
+                <label class="kinda-important">{{notNull}}</label>
+            </span>
+            <span class="col-7 md:col-8">
+                <p-dropdown appendTo="body" placeholder="Chọn loại thiết bị" baseZIndex="2" [style]="{'width':'100%'}" [options]="equipmentCategory"
+                    optionValue="value" optionLabel="name" formControlName="category" [ngClass]="{'ng-dirty': isSubmitted && getControl.category.errors}"></p-dropdown>
+            </span>
+        </div>
+        <div class="grid align-items-center col-12 md:col-10">
+            <span class="col-5 md:col-4"><label>Thông Tin Thiết Bị</label></span>
+            <span class="col-7 md:col-8"><textarea class="w-full" pInputTextarea [rows]="3"
+                    formControlName="description"></textarea></span>
+        </div>
+        <div class="grid align-items-center col-12 md:col-10">
+            <span class="col-5 md:col-4">
+                <label>Nhà Cung Cấp</label>
+            </span>
+            <span class="col-7 md:col-8">
+                <input placeholder="Nhập nhà cung cấp" class="w-full" pInputText formControlName="vendor"/>
+            </span>
+        </div>
+        <div class="grid align-items-center col-12 md:col-10">
+            <span class="col-5 md:col-4">
+                <label>Ngày Nhập Về</label>
+            </span>
+            <span class="col-7 md:col-8">
+                <p-calendar placeholder="Chọn ngày nhập về" [appendTo]="mobileScreen?'':'body'" baseZIndex="2"
+                    [showIcon]="true" class="calendar-field" [showOtherMonths]="true" dateFormat="dd/mm/yy"
+                    formControlName="importDate">
+                </p-calendar>
+            </span>
+        </div>
+        <div class="grid align-items-center col-12 md:col-10">
+            <span class="col-5 md:col-4">
+                <label>Thời Hạn Bảo Hành</label>
+            </span>
+            <span class="col-7 md:col-8">
+                <p-calendar placeholder="Chọn thời hạn bảo hành" [appendTo]="mobileScreen?'':'body'" baseZIndex="2"
+                    [showIcon]="true" class="calendar-field" [showOtherMonths]="true" dateFormat="dd/mm/yy"
+                    formControlName="warrantyTime">
+                </p-calendar>
+            </span>
+        </div>
+        <div *ngIf="!isEdit" class="grid align-items-center col-12 md:col-10">
+            <span class="col-5 md:col-4"><label>Nhân Viên Sử Dụng</label></span>
+            <span class="col-7 md:col-8">
+                <p-dropdown placeholder="Chọn nhân viên sử dụng" appendTo="body" baseZIndex="2"
+                    [style]="{'width':'100%'}" [options]="employeeList" optionValue="value" optionLabel="name"
+                    [filter]="true" filterBy="name" formControlName="employeeId"></p-dropdown>
+            </span>
+        </div>
+        <div class="grid align-items-center col-12 md:col-10">
+            <span class="col-5 md:col-4"><label>Trạng Thái</label></span>
+            <span class="col-7 md:col-8">
+                <p-dropdown appendTo="body" placeholder="Chọn trạng thái" baseZIndex="2" [style]="{'width':'100%'}" [options]="equipmentStatus"
+                    optionValue="value" optionLabel="name" formControlName="status"></p-dropdown>
+            </span>
+        </div>
+    </div>
+    <div class="w-full mt-4" style="text-align: right">
+        <button pButton pRipple class="p-button-outlined " icon="pi pi-save" label="Lưu" (click)="onSubmit()"></button>
+    </div>
+</div>

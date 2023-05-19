@@ -1,0 +1,40 @@
+.container-header {
+  margin-bottom: 5px;
+  border-bottom: 1px #c5e1eb solid;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+  padding-right: 0px;
+  width: 100%;
+  background-color: #9edbeb;
+}
+
+.container-header .logo .logo-its {
+  width: 20vh;
+  height: 10vh;
+  padding: 8px;
+}
+
+.container-header .drop-down-profile {
+  margin: 0 50px;
+  display: flex;
+}
+
+.container-header .drop-down-profile .form-search {
+  margin: 0 10px;
+}
+
+.header-document {
+  color: #b43ce4;
+  white-space: nowrap;
+  width: 40%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.header-document:hover {
+  color: #fa4860;
+}

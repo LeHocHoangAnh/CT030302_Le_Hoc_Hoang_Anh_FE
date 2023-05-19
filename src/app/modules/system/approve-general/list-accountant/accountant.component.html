@@ -1,0 +1,70 @@
+<div class="container-accountant">
+  <div class="accountant-header">
+    <div class="accountant-time col-12" [formGroup]="searchForm">
+      <div class="flex justify-content-between">
+        <button type="button" pButton pRipple label="Tải File Excel" icon="pi pi-file-excel" (click)="importExcel()"
+          class="p-button-success p-mr-2 mr-2 btn-excel" pTooltip="XLS" tooltipPosition="bottom"></button>
+        <button type="button" pButton pRipple label="Xuất File Excel" icon="bx bxs-download"
+          (click)="confirmExportExcel($event)" class="p-button-success p-mr-2 btn-excel" pTooltip="XLS"
+          tooltipPosition="bottom"></button>
+      </div>
+      <div class="select-time">
+        <label class="standard-label">Thời Gian</label>
+        <p-dropdown [options]="listTimes" [(ngModel)]="selectedTimes" [showClear]="true" placeholder="Chọn thời gian"
+          formControlName="timeYear" optionLabel="name" optionValue="name"
+          (onChange)="SearchInformation()"></p-dropdown>
+      </div>
+      <div class="input-name">
+        <label class="standard-label">Tên NV</label>
+        <input type="text" [maxLength]="50" (keyup.enter)="onSearch()" pInputText formControlName="fullName" />
+      </div>
+      <div class="input-name">
+        <label class="standard-label">Mã NV</label>
+        <input type="text" [maxLength]="50" pInputText (keyup.enter)="onSearch()" formControlName="employeeCode" />
+      </div>
+      <div class="btn-search">
+        <button pButton appDebounceClick label="Tìm Kiếm" (click)="onSearch()" class="search-btn"
+          type="button"></button>
+      </div>
+    </div>
+  </div>
+  <div class="accountant-body">
+    <div class="paginator-top">
+      <div class="ml-2 text-lg font-medium">
+        Số bản ghi: {{recordStart}}-{{recordEnd}} (Tổng số {{totalRecord}})
+      </div>
+      <p-paginator [rows]="pageSize" [totalRecords]="totalRecord" [pageLinkSize]="pageLinkSize"
+        (onPageChange)="pageClick($event)" #paginator>
+      </p-paginator>
+    </div>
+    <p-table [columns]="cols" [frozenColumns]="frozenColumns" [value]="timeKeeping" [scrollable]="true"
+      frozenWidth="35vw" [style.height.px]="100" styleClass="p-datatable-gridlines p-datatable-xl">
+      <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+          <col *ngFor="let col of columns" [style.width.vw]="col.width">
+        </colgroup>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th id="th-title" *ngFor="let col of columns">
+            {{ col.header }}
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-time let-columns="columns">
+        <tr>
+          <td style="text-align: center" *ngFor="let col of columns">
+            <button *ngIf="col.field ==='edit'" class="edit" pButton pRipple type="button" icon="pi pi-pencil"
+              (click)="toEditDialog(time)" class="p-button-rounded p-button-text p-button-info btn-delete"></button>
+            <div *ngIf="col.field !== 'edit'" [style.font-weight]="col.frozen?500:400">
+              {{time[col.field]}}
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+<p-toast [baseZIndex]="999" position="top-right"></p-toast>
+<p-confirmPopup>
+</p-confirmPopup>

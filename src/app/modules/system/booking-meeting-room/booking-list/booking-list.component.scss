@@ -1,0 +1,54 @@
+:host ::ng-deep .content-timekeeping {
+
+    // #0d6efd
+    .p-datepicker table td {
+        padding: 0;
+    }
+
+    .p-datepicker .p-timepicker button {
+        height: 1rem;
+    }
+
+    .p-datepicker table td>span {
+        height: 2rem;
+    }
+
+    .fc-license-message {
+        display: none;
+    }
+
+    .fc .fc-timeline-slot-cushion,
+    .fc-col-header-cell-cushion,
+    .fc-list-day-text,
+    .fc-list-day-side-text {
+        text-decoration: none;
+    }
+
+    .fc .fc-timeline-slot-cushion::after, .fc-scrollgrid-shrink-cushion::after {
+        content: " giờ";
+    }
+
+    .fc-scrollgrid-shrink-frame {
+        text-align: center;
+    }
+
+    .p-celleditor .ng-star-inserted ng-untouched ng-pristine ng-valid p-inputtext p-component p-filled {
+        width: 100%;
+    }
+
+    .fc-button-primary {
+        margin-right: 2px;
+    }
+
+    @media(max-width: 768px){
+        .fc-toolbar .fc-button, .fc-sticky {
+            font-size: 0.85rem !important;
+        }
+        .fc-toolbar-title{
+            font-size: 1.4rem;
+        }
+        .fc-event-time{
+            display: none;
+        }
+    }
+}

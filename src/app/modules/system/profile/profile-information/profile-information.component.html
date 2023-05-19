@@ -1,0 +1,406 @@
+<!-- *** webview section *** -->
+<div class="content">
+    <div class="flex flex-column lg:flex-row justify-content-between">
+        <!--  -->
+        <div class="mr-lg-3 mb-3 mb-lg-0">
+            <div class="row">
+                <div class="col-12 flex flex-row justify-content-center mb-1 p-0">
+                    <div class="avatar-outside card text-center border-light lg:shadow-sm p-0">
+                        <div class="avatar-preview">
+                            <img [src]="image" *ngIf="image !== null">
+                        </div>
+                    </div>
+                </div>
+                <form *ngIf="!mobileScreen" [formGroup]="formData" class="p-0 col-12">
+                    <div class="col-12">
+                        <div class="card card-body border-light shadow-sm">
+                            <h2 class="h5 mb-3">Thông tin Bảo mật</h2>
+                            <div class="col-lg-12 mb-2">
+                                <label>Mật khẩu</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><span class="bx bx-lock-open-alt"></span></span>
+                                    <input type="password" class="form-control" value="***********" [disabled]="true" />
+                                    <button type="button" (click)="editPassword()" class="input-group-text"><span
+                                            [class]="checkEditPassword ? 'bx bx-chevron-up' :'bx bx-pencil'"></span></button>
+                                </div>
+                            </div>
+                            <div [class]="checkEditPassword ? 'edit-form-true' :'edit-form-false'">
+                                <div class="col-lg-12 mb-2">
+                                    <label>Mật khẩu hiện tại</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><span class="bx bx-lock-open-alt"></span></span>
+                                        <input required maxlength="30" pattern="[^\s]*"
+                                            [type]="checkShowPassCurrent ? 'text':'password'" class="form-control"
+                                            placeholder="Mật khẩu hiện tại" formControlName="currentPassword"
+                                            [ngClass]="{ 'ng-dirty': submitted }">
+                                        <button type="button" (click)="showPassword(1)" class="input-group-text"><span
+                                                [class]="checkShowPassCurrent ? 'bx bx-show':'bx bx-hide'"></span></button>
+                                    </div>
+                                    <div *ngIf="(f.currentPassword.invalid && f.currentPassword.dirty) || (submitted && f.currentPassword.errors) || (submitted && checkCurrentPassWord)"
+                                        class="p-error">
+                                        <div *ngIf="f.currentPassword.errors || checkCurrentPassWord">{{validate.MES_3}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 mb-2">
+                                    <label>Mật khẩu mới</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><span class="bx bx-lock-open-alt"></span></span>
+                                        <input required minlength="3" maxlength="30" pattern="[^\s]*"
+                                            [type]="checkShowNewPass ? 'text':'password'" type="password"
+                                            class="form-control" placeholder="Mật khẩu mới"
+                                            formControlName="newPassword"
+                                            [ngClass]="{ 'ng-dirty': submitted && f.newPassword.errors }">
+                                        <button type="button" (click)="showPassword(2)" class="input-group-text"><span
+                                                [class]="checkShowNewPass ? 'bx bx-show':'bx bx-hide'"></span></button>
+                                    </div>
+                                    <div *ngIf="(f.newPassword.invalid && f.newPassword.dirty) || (submitted && f.newPassword.errors)"
+                                        class="p-error">
+                                        <div *ngIf="f.newPassword.errors">{{validate.MES_4}}</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 mb-3">
+                                    <label>Nhập lại mật khẩu mới</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><span class="bx bx-lock-open-alt"></span></span>
+                                        <input required minlength="3" maxlength="30" pattern="[^\s]*"
+                                            [type]="checkShowReNewPass ? 'text':'password'" type="password"
+                                            class="form-control" placeholder="Nhập lại mật khẩu mới"
+                                            formControlName="reNewPassword"
+                                            [ngClass]="{ 'ng-dirty': submitted && f.reNewPassword.errors }">
+                                        <button type="button" (click)="showPassword(3)" class="input-group-text"><span
+                                                [class]="checkShowReNewPass ? 'bx bx-show':'bx bx-hide'"></span></button>
+                                    </div>
+                                    <div *ngIf="(f.reNewPassword.invalid && f.reNewPassword.dirty) || (submitted && f.reNewPassword.errors ||(submitted && checkNotSamePassWord))"
+                                        class="p-error">
+                                        <div *ngIf="f.reNewPassword.errors || checkNotSamePassWord">{{validate.MES_3}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <button icon="pi pi-save" label="Cập nhật" (click)="onSubmit()" pButton
+                                        style="float:right"
+                                        [class]="checkEditPassword ? 'btn btn-success edit-form-true' :'edit-form-false'"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="" style="width:100%">
+            <!-- laptop/PC view -->
+            <span *ngIf="!mobileScreen">
+                <div class="card card-body bg-white border-light shadow-sm mb-2">
+                    <div class="flex flex-row align-items-center justify-content-between">
+                        <h2 class="h5 mb-3">Thông tin cá nhân</h2>
+                        <form [formGroup]="mailForm">
+                            <button *ngIf="isLeader" pButton icon="pi pi-cog" label="Mail thông báo" class="h5 mb-3"
+                                (click)="mailSettings.toggle($event)"></button>
+                            <p-overlayPanel (onHide)="submitChange()" appendTo="body" #mailSettings>
+                                <ng-template pTemplate>
+                                    <span class="flex flex-row align-items-center">
+                                        <p-toggleButton [onIcon]="'pi pi-check'" offIcon="pi pi-times"
+                                            formControlName="bookingDayOffNotify"></p-toggleButton>
+                                        <label class="toggle-label">Đăng ký OT/Ngày nghỉ</label>
+                                    </span>
+                                    <!-- not used: flex -> hidden -->
+                                    <span class="hidden flex-row align-items-center mt-3">
+                                        <p-toggleButton [onIcon]="'pi pi-check'" offIcon="pi pi-times"
+                                            formControlName="confirmDayOffNotify"></p-toggleButton>
+                                        <label class="toggle-label">Phê duyệt OT/Ngày nghỉ</label>
+                                    </span>
+                                    <!--  -->
+                                    <span class="flex flex-row align-items-center mt-3">
+                                        <p-toggleButton [onIcon]="'pi pi-check'" offIcon="pi pi-times"
+                                            formControlName="bookingMeetingNotify"></p-toggleButton>
+                                        <label class="toggle-label">Đăng ký phòng họp</label>
+                                    </span>
+                                    <span class="flex flex-row align-items-center mt-3">
+                                        <p-toggleButton [onIcon]="'pi pi-check'" offIcon="pi pi-times"
+                                            formControlName="confirmMeetingNotify"></p-toggleButton>
+                                        <label class="toggle-label">Phê duyệt phòng họp</label>
+                                    </span>
+                                </ng-template>
+                            </p-overlayPanel>
+                        </form>
+                    </div>
+                    <ng-container [ngTemplateOutlet]="personalInfor"></ng-container>
+                </div>
+                <div class="card card-body bg-white border-light shadow-sm">
+                    <h2 class="h5 mb-3">Thông tin chi tiết</h2>
+                    <ng-container [ngTemplateOutlet]="detailInfor"></ng-container>
+                </div>
+                <div class="card card-body bg-white border-light shadow-sm my-2">
+                    <h2 class="h5 mb-3">Dự Án Tham Gia</h2>
+                    <ng-container [ngTemplateOutlet]="historyProject"></ng-container>
+                </div>
+            </span>
+            <!-- mobile view -->
+            <span *ngIf="mobileScreen">
+
+                <p-panel header="Thông tin cá nhân" [toggleable]="true" [collapsed]="false">
+                    <ng-container [ngTemplateOutlet]="personalInfor"></ng-container>
+                </p-panel>
+
+                <p-panel styleClass="mt-1" header="Thông tin chi tiết" [toggleable]="true" [collapsed]="true">
+                    <ng-container [ngTemplateOutlet]="detailInfor"></ng-container>
+                </p-panel>
+
+                <p-panel styleClass="mt-1" header="Dự án tham gia" [toggleable]="true" [collapsed]="true">
+                    <ng-container [ngTemplateOutlet]="historyProject"></ng-container>
+                </p-panel>
+
+                <p-panel styleClass="mt-1" header="Cài đặt" [toggleable]="true" [collapsed]="true">
+                    <form [formGroup]="formData" class="p-0 col-12">
+                        <div class="col-lg-12 mb-2">
+                            <label>Mật khẩu</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><span class="bx bx-lock-open-alt"></span></span>
+                                <input type="password" class="form-control" value="***********" [disabled]="true" />
+                                <button type="button" (click)="editPassword()" class="input-group-text"><span
+                                        [class]="checkEditPassword ? 'bx bx-chevron-up' :'bx bx-pencil'"></span></button>
+                            </div>
+                        </div>
+                        <div [class]="checkEditPassword ? 'edit-form-true' :'edit-form-false'">
+                            <div class="col-lg-12 mb-2">
+                                <label>Mật khẩu hiện tại</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><span class="bx bx-lock-open-alt"></span></span>
+                                    <input required maxlength="30" pattern="[^\s]*"
+                                        [type]="checkShowPassCurrent ? 'text':'password'" class="form-control"
+                                        placeholder="Mật khẩu hiện tại" formControlName="currentPassword"
+                                        [ngClass]="{ 'ng-dirty': submitted }">
+                                    <button type="button" (click)="showPassword(1)" class="input-group-text"><span
+                                            [class]="checkShowPassCurrent ? 'bx bx-show':'bx bx-hide'"></span></button>
+                                </div>
+                                <div *ngIf="(f.currentPassword.invalid && f.currentPassword.dirty) || (submitted && f.currentPassword.errors) || (submitted && checkCurrentPassWord)"
+                                    class="p-error">
+                                    <div *ngIf="f.currentPassword.errors || checkCurrentPassWord">{{validate.MES_3}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 mb-2">
+                                <label>Mật khẩu mới</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><span class="bx bx-lock-open-alt"></span></span>
+                                    <input required minlength="3" maxlength="30" pattern="[^\s]*"
+                                        [type]="checkShowNewPass ? 'text':'password'" type="password"
+                                        class="form-control" placeholder="Mật khẩu mới" formControlName="newPassword"
+                                        [ngClass]="{ 'ng-dirty': submitted && f.newPassword.errors }">
+                                    <button type="button" (click)="showPassword(2)" class="input-group-text"><span
+                                            [class]="checkShowNewPass ? 'bx bx-show':'bx bx-hide'"></span></button>
+                                </div>
+                                <div *ngIf="(f.newPassword.invalid && f.newPassword.dirty) || (submitted && f.newPassword.errors)"
+                                    class="p-error">
+                                    <div *ngIf="f.newPassword.errors">{{validate.MES_4}}</div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 mb-3">
+                                <label>Nhập lại mật khẩu mới</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><span class="bx bx-lock-open-alt"></span></span>
+                                    <input required minlength="3" maxlength="30" pattern="[^\s]*"
+                                        [type]="checkShowReNewPass ? 'text':'password'" type="password"
+                                        class="form-control" placeholder="Nhập lại mật khẩu mới"
+                                        formControlName="reNewPassword"
+                                        [ngClass]="{ 'ng-dirty': submitted && f.reNewPassword.errors }">
+                                    <button type="button" (click)="showPassword(3)" class="input-group-text"><span
+                                            [class]="checkShowReNewPass ? 'bx bx-show':'bx bx-hide'"></span></button>
+                                </div>
+                                <div *ngIf="(f.reNewPassword.invalid && f.reNewPassword.dirty) || (submitted && f.reNewPassword.errors ||(submitted && checkNotSamePassWord))"
+                                    class="p-error">
+                                    <div *ngIf="f.reNewPassword.errors || checkNotSamePassWord">{{validate.MES_3}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <button icon="pi pi-save" label="Cập nhật" (click)="onSubmit()" pButton
+                                    style="float:right"
+                                    [class]="checkEditPassword ? 'btn btn-success edit-form-true' :'edit-form-false'"></button>
+                            </div>
+                        </div>
+                    </form>
+                    <form [formGroup]="mailForm" class="p-0 col-12">
+                        <button *ngIf="isLeader" pButton icon="pi pi-cog" label="Mail thông báo"
+                            class="h5 mb-1 w-full p-button-outlined" (click)="mailSettings.toggle($event)"></button>
+                        <p-overlayPanel (onHide)="submitChange()" appendTo="body" #mailSettings>
+                            <ng-template pTemplate>
+                                <span class="flex flex-row align-items-center">
+                                    <p-toggleButton [onIcon]="'pi pi-check'" offIcon="pi pi-times"
+                                        formControlName="bookingDayOffNotify"></p-toggleButton>
+                                    <label class="toggle-label">Đăng ký OT/Ngày nghỉ</label>
+                                </span>
+                                <!-- not used: flex -> hidden -->
+                                <span class="hidden flex-row align-items-center mt-3">
+                                    <p-toggleButton [onIcon]="'pi pi-check'" offIcon="pi pi-times"
+                                        formControlName="confirmDayOffNotify"></p-toggleButton>
+                                    <label class="toggle-label">Phê duyệt OT/Ngày nghỉ</label>
+                                </span>
+                                <!--  -->
+                                <span class="flex flex-row align-items-center mt-3">
+                                    <p-toggleButton [onIcon]="'pi pi-check'" offIcon="pi pi-times"
+                                        formControlName="bookingMeetingNotify"></p-toggleButton>
+                                    <label class="toggle-label">Đăng ký phòng họp</label>
+                                </span>
+                                <span class="flex flex-row align-items-center mt-3">
+                                    <p-toggleButton [onIcon]="'pi pi-check'" offIcon="pi pi-times"
+                                        formControlName="confirmMeetingNotify"></p-toggleButton>
+                                    <label class="toggle-label">Phê duyệt phòng họp</label>
+                                </span>
+                            </ng-template>
+                        </p-overlayPanel>
+                    </form>
+                </p-panel>
+            </span>
+        </div>
+    </div>
+</div>
+<!--  -->
+<!-- *** template section *** -->
+<!--  -->
+<ng-template #personalInfor>
+    <div class="row">
+        <div class="col-lg-6 mb-3">
+            <div>
+                <label>Họ tên</label>
+                <div class="input-group">
+                    <span class="input-group-text"><span class="bx bx-user"></span></span>
+                    <input class="form-control" [value]="dataProvider?.fullName" [disabled]="true" />
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-3">
+            <div>
+                <label>Email</label>
+                <div class="input-group">
+                    <span class="input-group-text"><span class="bx bx-mail-send"></span></span>
+                    <input class="form-control" [value]="dataProvider?.email " [disabled]="true" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 mb-3">
+            <label>Ngày sinh</label>
+            <div class="input-group">
+                <span class="input-group-text"><span class="bx bx-calendar"></span></span>
+                <input class="form-control" [value]="dataProvider?.dateOfBirth| date: 'dd/MM/yyyy'" [disabled]="true" />
+            </div>
+        </div>
+        <div class="col-lg-6 mb-3">
+            <label>Giới tính</label>
+            <div class="input-group">
+                <span class="input-group-text"><span class="bx bx-male-female"></span></span>
+                <input class="form-control" [value]="dataProvider?.gender? 'Nam':'Nữ'" [disabled]="true" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 mb-1">
+            <div class="form-group">
+                <label>Số điện thoại</label>
+                <div class="input-group">
+                    <span class="input-group-text"><span class="bx bx-phone"></span></span>
+                    <input class="form-control" [value]="dataProvider?.phoneNumber" [disabled]="true" />
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-1">
+            <div class="form-group">
+                <label>Địa chỉ</label>
+                <div class="input-group">
+                    <span class="input-group-text"><span class="bx bxs-institution"></span></span>
+                    <input class="form-control"
+                        [value]="dataProvider.tempAddress?dataProvider.tempAddress:dataProvider.address"
+                        [disabled]="true" />
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<ng-template #detailInfor>
+    <div class="row">
+        <div class="col-lg-6 mb-3">
+            <div class="form-group">
+                <label>Tên phòng ban</label>
+                <div class="input-group">
+                    <span class="input-group-text"><span class='bx bx-cabinet'></span></span>
+                    <input class="form-control" [value]="dataProvider?.departmentName" [disabled]="true" />
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-3">
+            <div class="form-group">
+                <label>Ngày tham gia công ty</label>
+                <div class="input-group">
+                    <span class="input-group-text"><span class="bx bx-calendar"></span></span>
+                    <input class="form-control" [value]="dataProvider?.dateEntry| date: 'dd/MM/yyyy'"
+                        [disabled]="true" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 mb-3 flex flex-column lg:flex-row flex-wrap">
+            <div class=" col-lg-5 form-group">
+                <label>Tên Ngân Hàng</label>
+                <div class="input-group">
+                    <span class="input-group-text"><span class='bx bxs-bank'></span></span>
+                    <input class="form-control" [value]="dataProvider?.bankName" [disabled]="true" />
+                </div>
+            </div>
+            <div class="col-lg-7 pl-lg-1 form-group">
+                <label>Số tài khoản</label>
+                <div class="input-group">
+                    <span class="input-group-text"><span class='bx bxs-bank'></span></span>
+                    <input class="form-control" [value]="dataProvider?.bankAccount" [disabled]="true" />
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="form-group">
+                <label>Mã nhân viên</label>
+                <div class="input-group">
+                    <span class="input-group-text"><span class="bx bx-barcode"></span></span>
+                    <input class="form-control" [value]="dataProvider?.employeeCode" [disabled]="true" />
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<ng-template #historyProject>
+    <div class="row">
+        <p-table [columns]="columns" [resizableColumns]="true" [value]="dataHistory" [scrollable]="true"
+            scrollHeight="40vh" class="p-0" styleClass="p-datatable-gridlines p-datatable-striped p-datatable-sm"
+            selectionMode="single">
+            <ng-template pTemplate="colgroup">
+                <colgroup>
+                    <col style="width: 20%" />
+                    <col *ngIf="!mobileScreen" style="width: 20%" />
+                    <col style="width: 20%" />
+                    <col style="width: 20%" />
+                    <col style="width: 20%" />
+                </colgroup>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of columns" style="text-align: center">
+                        {{ col.header }}
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-data>
+                <tr [pSelectableRow]="data">
+                    <td style="text-align: center" class="router-link" routerLink="/projects-edit/{{data.id}}">
+                        {{data.codeProjects}}</td>
+                    <td *ngIf="!mobileScreen" style="text-align: center">{{data.nameProjects}}</td>
+                    <td style="text-align: center">{{data.timeStart}}</td>
+                    <td style="text-align: center">{{data.timeEnd}}</td>
+                    <td style="text-align: center">{{data.role}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</ng-template>
+<p-toast position="top-right"></p-toast>

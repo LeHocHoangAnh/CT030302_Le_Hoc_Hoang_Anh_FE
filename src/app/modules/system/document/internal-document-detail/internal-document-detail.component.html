@@ -1,0 +1,40 @@
+<div class="grid align-items-start pt-1 px-2">
+    <div *ngIf="isHR" class="col-12 text-right">
+        <button *ngIf="doCreate" pButton class="p-panel-header-icon mr-1" icon="pi pi-eye" label="Xem trước"
+            (click)="preview()"></button>
+        <button *ngIf="!doCreate && !isEdit" pButton class="p-panel-header-icon" label="Chỉnh sửa" icon="bx bx-edit"
+            (click)="toEdit()"></button>
+        <button *ngIf="doCreate || isEdit" pButton class="p-panel-header-icon mx-1" icon="bx bx-save" label="Lưu"
+            (click)="saveConfirmPopUp($event)"></button>
+    </div>
+    <p-panel class="col-12" styleClass="p-scrollpanel-wrapper">
+        <ng-template pTemplate="header">
+            <div *ngIf="isHR && isEdit" class="grid align-items-center" style="width:100%">
+                <div class="grid col-12 md:col-6 align-items-center">
+                    <div class="col-2">
+                        <label for="nameInput"> Tên </label>
+                        <label class="kinda-important">{{notNull}}</label>
+                    </div>
+                    <div class="col-9"><input id="nameInput" pInputText type="text" class="w-full" [(ngModel)]="name"
+                            [class]="isSubmited && !name?'p-invalid':''" /></div>
+                </div>
+                <div class="grid col-12 md:col-6 align-items-center">
+                    <div class="col-2"><label for="descriptionInput">Mô Tả</label></div>
+                    <div class="col-9"><input id="descriptionInput" class="w-full" type="text" pInputText [(ngModel)]="description" />
+                    </div>
+                </div>
+            </div>
+            <label *ngIf="!isEdit">{{name}}</label>
+        </ng-template>
+        <div *ngIf="isHR && isEdit" [class]="isSubmited && !name?'p-invalid':''" [style]="{'height':'65vh'}">
+            <ckeditor [(ngModel)]="textDecodeBase64" [editor]="editor" data="" class="ck-config"></ckeditor>
+        </div>
+        <!-- <p-editor *ngIf="isHR && isEdit" [(ngModel)]="textDecodeBase64" [style]="{'height':doCreate?'61vh':'72vh'}"
+            [class]="isSubmited && !name?'p-invalid':''">
+        </p-editor> -->
+        <p-scrollPanel *ngIf="!isEdit" [style]="{'height':'65vh'}">
+            <div style="font-family: sans-serif;" [innerHTML]="textHTML" #textParent></div>
+        </p-scrollPanel>
+    </p-panel>
+</div>
+<!-- <p-confirmDialog header="Xác Nhận" icon="pi pi-exclamation-triangle"></p-confirmDialog> -->

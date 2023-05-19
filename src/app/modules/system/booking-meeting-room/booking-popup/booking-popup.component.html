@@ -1,0 +1,178 @@
+<div class="container">
+  <form [formGroup]="formData">
+    <div class="grid mt-1 mb-2" *ngIf="id!==null">
+      <div class="col-4 md:col-3">
+        <label>Người đăng ký</label>
+      </div>
+      <div class="col-8 md:col-9">
+        <label>{{registerUserName}}</label>
+      </div>
+    </div>
+    <div class="grid mt-1 align-items-center">
+      <div class="col-4 md:col-3">
+        <label>Chọn tên phòng</label>
+        <label class="kinda-important">{{notNull}}</label>
+      </div>
+      <div class="col-8 md:col-9">
+        <p-dropdown [options]="listRoom" optionLabel="name" optionValue="id" formControlName="roomId"
+          [style]="{ width: '100%' }" placeholder="Chọn phòng họp" [ngClass]="{
+            'ng-dirty': submitted && f.roomId.errors
+          }"></p-dropdown>
+        <div *ngIf="submitted && f.roomId.errors" class="p-error">
+          <div *ngIf="f.roomId.errors">{{ validate.MES_NOT_SELECT }}</div>
+        </div>
+        <!-- <pre>{{eventRoomId}}</pre>
+        <pre>{{listRoom|json}}</pre>
+<p-dropdown [options]="listRoom" optionLabel="name" optionValue="id"> </p-dropdown> -->
+      </div>
+    </div>
+    <div class="grid mt-1 mb-4">
+      <div class="col-4 md:col-3">
+        <label>Định kỳ </label>
+        <label class="kinda-important" style="width:1%">{{notNull}}</label>
+      </div>
+      <div class="col-8 md:col-9">
+        <span *ngFor="let period of periodTypes">
+          <p-radioButton class="mr-2" [value]="period.value" [label]="period.name"
+            (onClick)="changePeriodType(period.value)" formControlName="periodType" [ngClass]="{
+            'ng-dirty': submitted && f.periodType.errors
+          }"></p-radioButton>
+        </span>
+        <div *ngIf="
+            (f.periodType.invalid && f.periodType.dirty) ||
+            (submitted && f.periodType.errors)
+          " class="p-error">
+          <div *ngIf="f.periodType.errors">{{ validate.MES_NOT_SELECT }}</div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="formData.controls['periodType'].value===1" class="grid align-items-center">
+      <div class="col-4 md:col-3"><label>Ngày trong tuần</label></div>
+      <div class="col-8 md:col-9">
+        <p-multiSelect [options]="daysOfWeekPicker" [style]="{ width: '100%' }" placeholder="Hàng ngày"
+          optionLabel="name" optionValue="value" formControlName="daysOfWeek" display="chip" [ngClass]="{
+            'ng-dirty': submitted && f.daysOfWeek.errors 
+          }"></p-multiSelect>
+        <div *ngIf="submitted && f.daysOfWeek.errors" class="p-error">
+          <div *ngIf="f.daysOfWeek.errors">
+            {{ validate.MES_NOT_NULL }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid mt-5 md:mt-1 align-items-center">
+      <div class="md:col-3" [style]="mobileScreen?'width:21%;padding-left: 5px':''">
+        <label>Từ ngày</label>
+        <label class="kinda-important">{{notNull}}</label>
+      </div>
+      <div class="grid md:col-9 align-items-center" [style]="mobileScreen?'width:82%':''">
+        <div class="md:col-5" [style]="mobileScreen?'width:38%':''">
+          <p-calendar [minDate]="dateNow" formControlName="timeStart" [showIcon]="true" [showOnFocus]="false"
+            [showOtherMonths]="false" (onClose)="checkDateStart()" (onBlur)="checkDateStart()"
+            [style]="{ width: '100%' }" (onSelect)="onChangeStartDate()" placeholder="dd/mm/yyyy" dateFormat="dd/mm/yy"
+            [disabled]="formData.controls['id'].value!==null">
+          </p-calendar>
+        </div>
+        <div class="md:col-2 -ml-3" [style]="mobileScreen?'width:24%;text-align:right;margin-right:4px':'text-align:right'">
+          <label class="">Đến ngày</label>
+        </div>
+        <div class="md:col-5" [style]="mobileScreen?'width:37%':''">
+          <p-calendar [minDate]="timeStart" [showIcon]="true" [showOnFocus]="false" [showOtherMonths]="true"
+            (onClose)="checkDateEnd()" (onBlur)="checkDateEnd()" [disabled]="disableEndDate" dateFormat="dd/mm/yy"
+            placeholder="dd/mm/yyyy" [style]="{ width: '100%' }" formControlName="timeEnd">
+          </p-calendar>
+        </div>
+      </div>
+    </div>
+    <div class="grid mt-3 md:mt-1 align-items-center">
+      <div class="md:col-3" [style]="mobileScreen?'width:21%;padding-left: 5px':''">
+        <label>Giờ</label>
+        <label class="kinda-important">{{notNull}}</label>
+      </div>
+      <div class="grid md:col-9 align-items-center" [style]="mobileScreen?'width:82%':''">
+        <div class="md:col-5" [style]="mobileScreen?'width:38%':''">
+          <p-calendar [showIcon]="true" [timeOnly]="true" [stepMinute]="30" [showOnFocus]="false" placeholder="HH:mm"
+            [ngModel]="timeStart" formControlName="timeStart" (onBlur)="checkTimeStart()"
+            [icon]="'pi pi-calendar-minus'">
+          </p-calendar>
+          <div *ngIf="
+              ((f.timeStart.invalid && f.timeStart.dirty) ||
+              (submitted && f.timeStart.errors)) && !mobileScreen
+            " class="p-error">
+            <div *ngIf="f.timeStart.errors">
+              {{ validate.MES_NOT_NULL }}
+            </div>
+          </div>
+        </div>
+        <div class="md:col-2 -ml-3" [style]="mobileScreen?'width:24%;text-align:right;margin-right:4px':'text-align:right'">
+          <label>Đến</label>
+        </div>
+        <div class="md:col-5" [style]="mobileScreen?'width:37%':''">
+          <p-calendar [showIcon]="true" [timeOnly]="true" [showOnFocus]="false" [stepMinute]="30" [ngModel]="timeEnd"
+            formControlName="timeEnd" (onClose)="checkTimeEnd()" (onBlur)="checkTimeEnd()" placeholder="HH:mm"
+            [icon]="'pi pi-calendar-minus'">
+          </p-calendar>
+          <div *ngIf="
+                    ((f.timeEnd.invalid && f.timeEnd.dirty) ||
+                    (submitted && f.timeEnd.errors)) && !mobileScreen
+                  " class="p-error">
+            <div *ngIf="f.timeEnd.errors">
+              {{ validate.MES_NOT_NULL }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid mt-4 md:mt-1 mb-3">
+      <div class="col-12 md:col-3">
+        <label>Lý do</label>
+        <label class="kinda-important" style="width:1%">{{notNull}}</label>
+      </div>
+      <div class="col-12 md:col-9">
+        <textarea rows="5" cols="60" [style]="{ width: '100%' }" pInputTextarea formControlName="reason"
+          autoResize="autoResize" [ngClass]="{ 'ng-dirty': submitted && f.reason.errors }"></textarea>
+        <div *ngIf="
+            (f.reason.invalid && f.reason.dirty) ||
+            (submitted && f.reason.errors)
+          " class="p-error">
+          <div *ngIf="f.reason.errors">{{ validate.MES_NOT_NULL }}</div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="grid mt-1">
+      <div class="col-12 md:col-3"><label>Trạng thái</label></div>
+      <div class="col-12 md:col-9">
+        <button *ngIf="confirm == 1" style="background-color: #04aa6d" pButton pRipple type="button" label="Đồng ý"
+          class="p-button-rounded"></button>
+        <button *ngIf="confirm == 0" pButton pRipple type="button" label="Chờ phê duyệt"
+          class="p-button-rounded p-button-warning"></button>
+        <button *ngIf="confirm == 2" pButton pRipple type="button" label="Không đồng ý"
+          class="p-button-rounded p-button-danger"></button>
+      </div>
+    </div> -->
+    <button *ngIf="id != null && editValidateFlag" pButton pRipple label="Xoá" type="submit" (click)="confirmDelete()"
+      icon="pi pi-trash" class="p-button-danger"></button>
+    <button *ngIf="editValidateFlag" pButton pRipple label="Lưu" style="float: right" type="submit" (click)="onSubmit()"
+      icon="pi pi-check"></button>
+  </form>
+</div>
+
+<p-dialog [style]="{ width: '30vw' }" [draggable]="false" [breakpoints]="{'960px': '75vw', '640px': '100vw'}"
+  [(visible)]="dialogDisplay">
+  <ng-template pTemplate="header">
+    <h4>{{dialogType===DELETE_DIALOG?dialogLabelDelete:dialogLabelUpdate}}</h4>
+  </ng-template>
+  <ng-template pTemplate="body">
+    <label style="font-size: 18px;">{{dialogType===DELETE_DIALOG?dialogContentDelete:dialogContentUpdate}}</label>
+    <div class="mt-3 ml-2" *ngFor="let type of updateType">
+      <p-radioButton name="chosenUpdateType" [value]="type.value" [label]="type.name" [(ngModel)]="chosenUpdateType">
+      </p-radioButton>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button type="button" class="cancel-button p-button-outlined" icon="pi pi-times" pButton label="Từ chối"
+      (click)="dialogReject()"></button>
+    <button type="button" pButton label="Đồng ý" icon="pi pi-check"
+      (click)="dialogType===DELETE_DIALOG?deleteAccept():updateAccept()"></button>
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,97 @@
+<p-table #etbl [columns]="ownedEquipmentCols" [value]="ownedEquipmentList"
+    styleClass="p-datatable-gridlines p-datatable-xl" [rows]="tableRows" [paginator]="true"
+    [globalFilterFields]="['category','description', 'requestDate', 'name', 'serialNumber']">
+    <ng-template pTemplate="caption">
+        <span class="flex flex-row justify-content-between align-items-center w-full">
+            <label [style.display]="mobileScreen?'none':'block'">Danh sách thiết bị</label>
+            <span class="p-input-icon-left ml-auto">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="etbl.filterGlobal($event.target.value, 'contains')"
+                    placeholder="Search keyword" />
+            </span>
+        </span>
+    </ng-template>
+    <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+            <col *ngFor="let col of columns" [style.width]="col.width">
+        </colgroup>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th style="text-align: center" *ngFor="let col of columns">
+                {{col.header}}
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+            <td *ngFor="let col of columns" style="text-align: center">
+                <div *ngIf="col.field==='view'">
+                    <button pButton pRipple type="button" icon="pi pi-bars" (click)="openDetailDialog(rowData['id'])"
+                        class="p-button-rounded p-button-text p-button-info"></button>
+                </div>
+                <div *ngIf="col.field!=='hisory' && col.field!=='view'"
+                    [style]="{'text-align':col.field==='description'?'left':'center', 'white-space':'pre-wrap'}">
+                    {{rowData[col.field]}}</div>
+                <div *ngIf="col.field==='hisory'">
+                    <button pButton pRipple type="button" icon="bx bx-notepad"
+                        (click)="openHistoryDialog(rowData['id'])"
+                        class="p-button-rounded p-button-text p-button-info"></button>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="6">Danh sách trống</td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<!-- *** equipment detail dialog *** -->
+<p-dialog header="Thông Tin Chi Tiết" [(visible)]="equipmentDetailDialog" [style]="{'width': '100%'}">
+    <div class="w-full">
+        <table class="detail-table w-full">
+            <tr>
+                <td><label>Tên Thiết Bị</label></td>
+                <td>{{equipmentDetail?.name}}</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <hr>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Số Seri</label></td>
+                <td>{{equipmentDetail?.serialNumber}}</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <hr>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Loại Thiết Bị</label></td>
+                <td>{{equipmentDetail?.category}}</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <hr>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Chi Tiết Thiết Bị</label></td>
+                <td style="white-space: pre-wrap">{{equipmentDetail?.description}}</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <hr>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Ngày Nhận</label></td>
+                <td>{{equipmentDetail?.requestDate}}</td>
+            </tr>
+        </table>
+    </div>
+</p-dialog>

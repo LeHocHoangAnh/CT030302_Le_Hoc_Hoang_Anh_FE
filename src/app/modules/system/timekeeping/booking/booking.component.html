@@ -1,0 +1,403 @@
+<div class="container" style="padding:0.5rem">
+  <form [formGroup]="formData">
+    <div class="grid align-items-center mt-1">
+      <div class="flex flex-row col-4 md:col-3">
+        <label class="font-semibold">Loại đăng ký</label>
+        <label class="kinda-important">{{notNull}}</label>
+      </div>
+      <div class="col-8 md:col-9">
+        <p-dropdown [options]="registrationTypeList" placeholder="Chọn loại đăng ký" optionLabel="value"
+          optionValue="key" [(ngModel)]="selectedTypeRegistration" formControlName="selectedTypeRegistration"
+          [style]="{ width: '100%' }" (onChange)="onSelectregistrationType(selectedTypeRegistration)" [ngClass]="{
+            'ng-dirty': submitted && f.selectedTypeRegistration.errors
+          }"></p-dropdown>
+        <div *ngIf="submitted && f.selectedTypeRegistration.errors" class="p-error">
+          <div *ngIf="f.selectedTypeRegistration.errors">
+            {{ validate.MES_NOT_SELECT }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid align-items-center mt-2">
+      <div class="col-4 md:col-3" *ngIf="!keepingForgetFlag">
+        <label class="font-semibold">Lựa chọn</label>
+        <label class="kinda-important">{{notNull}}</label>
+      </div>
+      <div class="col-4 md:col-3" *ngIf="keepingForgetFlag">
+        <label class="font-semibold">Ngày đăng ký</label>
+        <label class="kinda-important" *ngIf="!keepingForgetFlag">{{notNull}}</label>
+      </div>
+      <div class="col-8 sm:col-9" *ngIf="keepingForgetFlag">
+        <p-calendar *ngIf="keepingForgetFlag" formControlName="dateStart" [showIcon]="true" [minDate]="requestStartDate"
+          [style.width]="screenWidth<500?'100%':'57%'" [maxDate]="requestEndDate" [showOnFocus]="false"
+          [showOtherMonths]="false" dateFormat="dd/mm/yy" [disabled]="true"></p-calendar>
+      </div>
+      <div class="col-8 md:col-9" *ngIf="!keepingForgetFlag">
+        <span *ngFor="let typeDate of typeDateList" class="p-field-checkbox p-2 pl-0">
+          <p-radioButton [(ngModel)]="selectedTypeTime" class="" formControlName="selectedTypeTime" [value]="typeDate"
+            (onClick)="selectTypeRadio(typeDate.key)" label="{{ typeDate.value }}" [ngClass]="{
+              'ng-dirty': submitted && f.selectedTypeRegistration.errors
+            }"></p-radioButton>
+          <!-- <label [for]="typeDate.key">{{ typeDate.value }}</label> -->
+        </span>
+        <div *ngIf="submitted && f.selectedTypeTime.errors" class="p-error">
+          <div *ngIf="f.selectedTypeTime.errors">
+            {{ validate.MES_NOT_SELECT }}
+          </div>
+        </div>
+      </div>
+      <div class="col-8 lg:col-9" *ngIf="keepingForgetFlag" style="display: none;">
+        <span *ngFor="let typeDate of typeDateList" class="p-field-checkbox p-2 pl-0">
+          <p-radioButton [(ngModel)]="selectedTypeTime" formControlName="selectedTypeTime" [value]="typeDate"
+            (onClick)="selectTypeRadio(typeDate.key)" [ngClass]="{
+              'ng-dirty': submitted && f.selectedTypeRegistration.errors
+            }"></p-radioButton>
+          <label [for]="typeDate.key">{{ typeDate.value }}</label>
+        </span>
+        <div *ngIf="submitted && f.selectedTypeTime.errors" class="p-error">
+          <div *ngIf="f.selectedTypeTime.errors">
+            {{ validate.MES_NOT_SELECT }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Mục "Ngày hiện tại" cho màn hình máy tính -->
+    <div class="grid align-items-center mt-2" *ngIf="screenWidth>=500">
+      <div class="col-4 md:col-3">
+        <label class="font-semibold" *ngIf="!keepingForgetFlag">Ngày bắt đầu</label>
+        <label class="font-semibold" *ngIf="keepingForgetFlag">Quên chấm công đến</label>
+        <label class="kinda-important" *ngIf="!keepingForgetFlag">{{notNull}}</label>
+      </div>
+      <div class="col-8 md:col-9">
+        <div class="grid">
+          <div class="col-12 md:col-6" *ngIf="!keepingForgetFlag">
+            <p-calendar *ngIf="!keepingForgetFlag" formControlName="dateStart" [showIcon]="true"
+              [minDate]="requestStartDate" [maxDate]="requestEndDate" [showOnFocus]="true" [showOtherMonths]="true"
+              dateFormat="dd/mm/yy" [disabled]="true"></p-calendar>
+          </div>
+          <div class="col-12 md:col-6" *ngIf="keepingForgetFlag" style="display: none;">
+            <p-calendar *ngIf="!keepingForgetFlag" formControlName="dateStart" [showIcon]="true"
+              [minDate]="requestStartDate" [maxDate]="requestEndDate" [showOnFocus]="true" [showOtherMonths]="false"
+              dateFormat="dd/mm/yy" [disabled]="true"></p-calendar>
+          </div>
+          <div class="col-12 md:col-2" *ngIf="keepingForgetFlag">
+            <p-checkbox (click)="checkBoxForget(0)" class="mt-2" formControlName="checkin" binary="true"
+              [(ngModel)]="checkIn"></p-checkbox>
+          </div>
+          <div class="col-12 md:col-6">
+            <div class="grid align-items-center">
+              <div class="col-3">
+                <span class="font-semibold">Giờ </span>
+              </div>
+              <div class="col-12 md:col-9">
+                <span class="flex flex-row align-items-center">
+                  <p-calendar (onClose)="updateStartDate()" (onBlur)="updateStartDate()" [(ngModel)]="dateStart"
+                    formControlName="dateStart" [minDate]="minStartDateOT?requestStartDate:0" [showIcon]="true"
+                    [timeOnly]="true" [showOnFocus]="true" placeholder="HH:mm" [disabled]="disabledHoursStart"
+                    [maxDate]=" maxStartDateOT?requestStartDate:0" [icon]="'pi pi-calendar-minus'"></p-calendar>
+                  <!-- <p-checkbox class="ml-3" *ngIf="keepingForgetFlag" formControlName="checkin" binary="true"
+                    [(ngModel)]="checkIn"></p-checkbox> -->
+                </span>
+                <div *ngIf="
+                    (f.dateStart.invalid && f.dateStart.dirty) ||
+                    (submitted && f.dateStart.errors)
+                  " class="p-error">
+                  <div *ngIf="f.dateStart.errors">
+                    {{ validate.MES_NOT_NULL }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Mục "Ngày hiện tại" cho màn hình mobile -->
+    <div *ngIf="screenWidth<500" class="mt-2">
+      <div class="grid align-items-center">
+        <div class="{{keepingForgetFlag?'col-7':'col-4'}} flex flex-row align-items-center">
+          <label class="font-semibold" *ngIf="!keepingForgetFlag">Ngày bắt đầu</label>
+          <label class="font-semibold" *ngIf="keepingForgetFlag">Quên chấm công đến</label>
+          <label class="kinda-important" *ngIf="!keepingForgetFlag">{{notNull}}</label>
+        </div>
+        <div class="{{keepingForgetFlag?'col-5':'col-8'}}">
+          <p-calendar [style]="{width:'100%'}" *ngIf="!keepingForgetFlag" formControlName="dateStart" [showIcon]="true"
+            [minDate]="requestStartDate" [maxDate]="requestEndDate" [showOnFocus]="true" [showOtherMonths]="true"
+            dateFormat="dd/mm/yy" [disabled]="true"></p-calendar>
+          <div *ngIf="keepingForgetFlag" style="display: none;">
+            <p-calendar *ngIf="!keepingForgetFlag" formControlName="dateStart" [showIcon]="true"
+              [minDate]="requestStartDate" [maxDate]="requestEndDate" [showOnFocus]="true" [showOtherMonths]="false"
+              dateFormat="dd/mm/yy" [disabled]="true"></p-calendar>
+          </div>
+          <p-checkbox *ngIf="keepingForgetFlag" (click)="checkBoxForget(0)" class="mt-2" formControlName="checkin"
+            binary="true" [(ngModel)]="checkIn"></p-checkbox>
+        </div>
+      </div>
+
+      <div class="grid align-items-center" [style.display]="keepingForgetFlag && disabledHoursStart?'none':'flex'">
+        <div class="col-4" style="text-align:left">
+          <label class="font-semibold">Giờ </label>
+        </div>
+        <div class="col-8">
+          <span class="flex flex-row align-items-center">
+            <p-calendar styleClass="w-full" class="w-full" (onClose)="updateStartDate()" (onBlur)="updateStartDate()"
+              [(ngModel)]="dateStart" formControlName="dateStart" [minDate]="minStartDateOT?requestStartDate:0"
+              [showIcon]="true" [timeOnly]="true" [showOnFocus]="true" placeholder="HH:mm"
+              [disabled]="disabledHoursStart" [maxDate]=" maxStartDateOT?requestStartDate:0"
+              [icon]="'pi pi-calendar-minus'"></p-calendar>
+          </span>
+          <div *ngIf="
+                (f.dateStart.invalid && f.dateStart.dirty) ||
+                (submitted && f.dateStart.errors)
+              " class="p-error">
+            <div *ngIf="f.dateStart.errors">
+              {{ validate.MES_NOT_NULL }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Mục "Ngày kết thúc" cho màn hình máy tính -->
+    <div class="grid align-items-center mt-2" *ngIf="screenWidth>=500">
+      <div class="col-12 md:col-3">
+        <label class="font-semibold" *ngIf="!keepingForgetFlag">Ngày kết thúc</label>
+        <label class="font-semibold" *ngIf="keepingForgetFlag">Quên chấm công về</label>
+        <label class="kinda-important" *ngIf="!keepingForgetFlag">{{notNull}}</label>
+      </div>
+      <div class="col-12 md:col-9">
+        <div class="grid">
+          <div class="col-12 md:col-6" *ngIf="!keepingForgetFlag">
+            <p-calendar (onClose)="updateEndDate(0)" (onBlur)="updateEndDate(0)" formControlName="dateEnd"
+              [minDate]="requestStartDate" [showIcon]="true" [showOnFocus]="false" [showOtherMonths]="true"
+              dateFormat="dd/mm/yy" placeholder="dd/mm/yyyy" [disabled]="disabledDateEnd"
+              [maxDate]="maxEndDateOT == true ? requestEndDate : 0">
+            </p-calendar>
+          </div>
+          <div class="col-12 md:col-6" *ngIf="keepingForgetFlag" style="display: none;">
+            <p-calendar (onClose)="updateEndDate(0)" (onBlur)="updateEndDate(0)" formControlName="dateEnd"
+              [minDate]="requestStartDate" [showIcon]="true" [showOnFocus]="false" [showOtherMonths]="true"
+              dateFormat="dd/mm/yy" placeholder="dd/mm/yyyy" [disabled]="disabledDateEnd"
+              [maxDate]="maxEndDateOT == true ? requestEndDate : 0">
+            </p-calendar>
+          </div>
+          <div class="col-12 md:col-2" *ngIf="keepingForgetFlag">
+            <p-checkbox class="mt-2" (click)="checkBoxForget(1)" *ngIf="keepingForgetFlag" formControlName="checkout"
+              binary="true" [(ngModel)]="checkOut"></p-checkbox>
+          </div>
+          <div class="col-12 md:col-6">
+            <div class="grid align-items-center">
+              <div class="col-3">
+                <span class="font-semibold">Giờ </span>
+              </div>
+              <div class="col-12 md:col-9">
+                <span class="flex flex-row align-items-center">
+                  <p-calendar (onClose)="updateEndDate(1)" (onBlur)="updateEndDate(1)" [(ngModel)]="dateEnd"
+                    formControlName="dateEnd" [minDate]="minEndDateOT?requestStartDate:0" [showIcon]="true"
+                    [timeOnly]="true" [showOnFocus]="true" placeholder="HH:mm" [disabled]="disabledHoursEnd"
+                    [maxDate]="maxEndDateOT == true ? requestEndDate : 0" [icon]="'pi pi-calendar-minus'">
+                  </p-calendar>
+                  <!-- <p-checkbox class="ml-3" *ngIf="keepingForgetFlag" formControlName="checkout" binary="true"
+                    [(ngModel)]="checkOut"></p-checkbox> -->
+                </span>
+                <div *ngIf="
+                    (f.dateEnd.invalid && f.dateEnd.dirty) ||
+                    (submitted && f.dateEnd.errors)
+                  " class="p-error">
+                  <div *ngIf="f.dateEnd.errors">
+                    {{ validate.MES_NOT_NULL }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Mục "Ngày kết thúc" cho màn hình mobile -->
+    <div *ngIf="screenWidth<500" class="mt-1">
+      <div class="grid align-items-center">
+        <div class="{{keepingForgetFlag?'col-7':'col-4'}} flex flex-row align-items-center">
+          <label class="font-semibold" *ngIf="!keepingForgetFlag">Ngày kết thúc</label>
+          <label class="font-semibold" *ngIf="keepingForgetFlag">Quên chấm công về</label>
+          <label class="kinda-important" *ngIf="!keepingForgetFlag">{{notNull}}</label>
+        </div>
+        <div class="{{keepingForgetFlag?'col-5':'col-8'}}">
+          <p-calendar [style]="{width:'100%'}" (onClose)="updateEndDate(0)" *ngIf="!keepingForgetFlag"
+            (onBlur)="updateEndDate(0)" formControlName="dateEnd" [minDate]="requestStartDate" [showIcon]="true"
+            [showOnFocus]="false" [showOtherMonths]="true" dateFormat="dd/mm/yy" placeholder="dd/mm/yyyy"
+            [disabled]="disabledDateEnd" [maxDate]="maxEndDateOT == true ? requestEndDate : 0">
+          </p-calendar>
+          <div *ngIf="keepingForgetFlag" style="display: none;">
+            <p-calendar (onClose)="updateEndDate(0)" (onBlur)="updateEndDate(0)" formControlName="dateEnd"
+              [minDate]="requestStartDate" [showIcon]="true" [showOnFocus]="false" [showOtherMonths]="true"
+              dateFormat="dd/mm/yy" placeholder="dd/mm/yyyy" [disabled]="disabledDateEnd"
+              [maxDate]="maxEndDateOT == true ? requestEndDate : 0">
+            </p-calendar>
+          </div>
+          <p-checkbox class="mt-2" (click)="checkBoxForget(1)" *ngIf="keepingForgetFlag" formControlName="checkout"
+            binary="true" [(ngModel)]="checkOut"></p-checkbox>
+        </div>
+      </div>
+
+      <div class="grid align-items-center" [style.display]="keepingForgetFlag && disabledHoursEnd?'none':'flex'">
+        <div class="col-4" style="text-align:left">
+          <label class="font-semibold">Giờ </label>
+        </div>
+        <div class="col-8">
+          <span class="flex flex-row align-items-center">
+            <p-calendar styleClass="w-full" class="w-full" (onClose)="updateEndDate(1)" (onBlur)="updateEndDate(1)"
+              [(ngModel)]="dateEnd" formControlName="dateEnd" [minDate]="minEndDateOT?requestStartDate:0"
+              [showIcon]="true" [timeOnly]="true" [showOnFocus]="true" placeholder="HH:mm" [disabled]="disabledHoursEnd"
+              [maxDate]="maxEndDateOT == true ? requestEndDate : 0" [icon]="'pi pi-calendar-minus'">
+            </p-calendar>
+            <!-- <p-checkbox class="ml-3" *ngIf="keepingForgetFlag" formControlName="checkout" binary="true"
+              [(ngModel)]="checkOut"></p-checkbox> -->
+          </span>
+          <div *ngIf="
+              (f.dateEnd.invalid && f.dateEnd.dirty) ||
+              (submitted && f.dateEnd.errors)
+            " class="p-error">
+            <div *ngIf="f.dateEnd.errors">
+              {{ validate.MES_NOT_NULL }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="keepingForgetFlag" class="grid mt-2">
+      <div class="col-12 md:col-3">
+        <label class="font-semibold">Ảnh bằng chứng</label>
+      </div>
+      <div class="col-12 md:col-9">
+        <div class="flex flex-row align-items-center justify-content-between" style="width:100%">
+          <div class="input-file-custom flex flex-row align-items-center">
+            <input id="input-file" (change)="onUploadImg($event)" type="file" accept="image/*" #imageFile />
+            <button id="altbtn-input" pButton label="Chọn tệp" (click)="imageFile.click()"></button>
+            <label for="altbtn-input" class="ml-1">{{inputFileLabel}}</label>
+          </div>
+          <button pButton type="button" icon="pi pi-eye" [disabled]="!evidenceImageView"
+            (click)="previewImage()"></button>
+        </div>
+      </div>
+      <p-dialog header="Preview Image" [(visible)]="imagePreview" [draggable]="false">
+        <img id="preview-image" [src]="evidenceImageView !== null ? evidenceImageView:image">
+      </p-dialog>
+    </div>
+    <div *ngIf="otFlag" class="grid align-items-center mt-1">
+      <div class="col-4 sm:col-3">
+        <label class="font-semibold">Dự án cần OT</label>
+        <label class="kinda-important" style="width:1%">{{notNull}}</label>
+      </div>
+      <div class="col-8 sm:col-9">
+        <p-dropdown [options]="dropdownProjectOT" placeholder="Chọn dự án" optionLabel="name" optionValue="id"
+          formControlName="selectedProject" [style]="{ width: '100%' }" [ngClass]="{
+            'ng-dirty': submitted && f.selectedProject.errors
+          }"></p-dropdown>
+        <div *ngIf="submitted && f.selectedProject.errors" class="p-error">
+          <div *ngIf="f.selectedProject.errors">
+            {{ validate.MES_NOT_SELECT }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid mt-2">
+      <div class="col-12 md:col-3">
+        <label class="font-semibold">Người phê duyệt</label>
+        <label class="kinda-important" style="width:1%">{{notNull}}</label>
+      </div>
+      <div class="col-12 md:col-9">
+        <p-multiSelect [options]="approverList" placeholder="Chọn người phê duyệt" optionLabel="key" optionValue="value"
+          formControlName="selectedApprover" [style]="{ width: '100%' }" [ngClass]="{
+            'ng-dirty': submitted && f.selectedApprover.errors
+          }" (onChange)="selectApprover()">
+        </p-multiSelect>
+        <div *ngIf="submitted && f.selectedApprover.errors" class="p-error">
+          <div *ngIf="f.selectedApprover.errors">
+            {{ validate.MES_NOT_SELECT }}
+          </div>
+        </div>
+        <label *ngIf="!(submitted && f.selectedApprover.errors)" class="tool-tip">(Chỉ chọn người có quyền phê duyệt. Tỉ
+          lệ duyệt cần đạt >=65%)</label>
+      </div>
+    </div>
+    <div class="grid mt-2">
+      <div class="col-12 md:col-3">
+        <label class="font-semibold">Người liên quan</label>
+      </div>
+      <div class="col-12 md:col-9">
+        <p-multiSelect [options]="relatedEmployeeControl" placeholder="Chọn người liên quan" optionLabel="key"
+          optionValue="value" formControlName="selectedRelatedEmployee" [style]="{ width: '100%' }"></p-multiSelect>
+        <label class="tool-tip">(Chọn những người liên quan nếu cần thông báo về xin phép này)</label>
+      </div>
+    </div>
+    <div *ngIf="approveStatus.length>0" class="grid align-items-center mt-2">
+      <div class="col-6 md:col-3"><label class="font-semibold">Trạng thái phê duyệt</label></div>
+      <div class="col-6 md:col-9">
+        <button pButton label="Xem thêm" (click)="statusDialog=true"></button>
+        <p-dialog [draggable]="false" [(visible)]="statusDialog" class="statusDialog">
+          <p-table [columns]="statusCols" class="w-full" [value]="approveStatus" responsiveLayout="scroll">
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th style="text-align:center">Người phê duyệt</th>
+                <th style="text-align:center">Trạng thái</th>
+                <th style="text-align:center">Lý do</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-status>
+              <tr>
+                <td style="text-align:center">{{status.name}}</td>
+                <td ngSwitch="{{status.progress}}" style="text-align:center">
+                  <span *ngSwitchCase="waitStatus"><i class="pi pi-ellipsis-h"></i></span>
+                  <span style="color:green" *ngSwitchCase="accpetStatus"><i class="pi pi-check"></i></span>
+                  <span style="color:red" *ngSwitchCase="rejectStatus"><i class="pi pi-times"></i></span>
+                </td>
+                <td style="text-align:center">{{status.reason}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-dialog>
+      </div>
+    </div>
+    <div class="grid align-items-center mt-1">
+      <div class="col-12 md:col-3">
+        <label class="font-semibold">Lý do </label>
+        <label class="kinda-important" style="width:1%">{{notNull}}</label>
+      </div>
+      <div class="col-12 md:col-9 flex flex-column">
+        <textarea formControlName="reason" [rows]="otFlag?2:3" cols="60" [style]="{ width: '100%' }" pInputTextarea
+          autoResize="autoResize" [ngClass]="{ 'ng-dirty': submitted && f.reason.errors }"></textarea>
+        <div *ngIf="
+          (f.reason.invalid && f.reason.dirty) ||
+          (submitted && f.reason.errors)
+          " class="p-error">
+          <div *ngIf="f.reason.errors">{{ validate.MES_NOT_NULL }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="grid align-items-center mt-1">
+      <div class="col-4 md:col-3"><label class="font-semibold">Trạng thái</label></div>
+      <div class="col-8 md:col-9">
+        <button *ngIf="confirm == 1" style="background-color: #04aa6d" pButton pRipple type="button" label="Đồng ý"
+          class="p-button-rounded"></button>
+        <button *ngIf="confirm == 0" pButton pRipple type="button" label="Chờ phê duyệt"
+          class="p-button-rounded p-button-warning"></button>
+        <button *ngIf="confirm == 2" pButton pRipple type="button" label="Không đồng ý"
+          class="p-button-rounded p-button-danger"></button>
+      </div>
+    </div>
+    <!-- Here lies the mighty delete-button -->
+    <div *ngIf="screenWidth<500" class="mt-5"></div>
+    <button *ngIf="(id != null && (confirm==0 ||confirm==2)) && !inProgress" pButton pRipple label="Xoá" type="submit"
+      (click)="confirmDelete('top', id)" icon="pi pi-trash" class="p-button-danger"></button>
+    <button *ngIf="confirm!==1" pButton pRipple label="Lưu" style="float: right" type="submit" (click)="onSubmit()"
+      icon="pi pi-check"></button>
+  </form>
+  <div *ngIf="screenWidth<500" class="pb-4"></div>
+</div>
+<p-confirmDialog #cd [style]="{ width: '30vw' }" key="positionDialog" [position]="position"
+  rejectButtonStyleClass="p-button-outlined">
+  <ng-template pTemplate="footer">
+    <button type="button" pButton [label]="confirmYes" (click)="cd.accept()" [style]="{ width: '80px' }"></button>
+    <button type="button" class="cancel-button" pButton [label]="confirmNo" (click)="cd.reject()"></button>
+  </ng-template>
+</p-confirmDialog>

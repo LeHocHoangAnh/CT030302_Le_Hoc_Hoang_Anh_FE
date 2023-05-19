@@ -1,0 +1,33 @@
+@media(max-width: 768px){
+  *{
+    font-size: 3vw !important;
+  }
+}
+:host ::ng-deep .container {
+  .p-datepicker table td {
+    padding: 0;
+  }
+
+  .p-datepicker .p-timepicker button {
+    height: 1rem;
+  }
+
+  .p-datepicker table td>span {
+    height: 2rem;
+  }
+
+  .fc-license-message {
+    display: none;
+  }
+}
+
+.kinda-important {
+  color: red;
+  margin-left: 4px;
+}
+
+form {
+  label {
+    font-weight: 500;
+  }
+}

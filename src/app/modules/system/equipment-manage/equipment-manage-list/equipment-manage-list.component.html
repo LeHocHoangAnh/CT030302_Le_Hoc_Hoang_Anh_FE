@@ -1,0 +1,183 @@
+<!-- *** webview *** -->
+<div class="card border-0">
+    <div class="search-filter w-full mt-2 grid justify-content-center align-items-center" [formGroup]="searchForm">
+        <div class="grid col-8 justify-content-center ">
+            <div class="grid w-12 pb-0">
+                <div class="grid col-12 md:col-4">
+                    <span class="col-4" style="text-align:right"><label>Tên Thiết Bị</label></span>
+                    <span class="col-8"><input style="width:100%" pInputText formControlName="name"
+                            (keyup.enter)="onSearch()" /></span>
+                </div>
+                <div class="grid col-12 md:col-4">
+                    <span class="col-3" style="text-align:right"><label>Số Seri</label></span>
+                    <span class="col-9"><input style="width:100%" pInputText formControlName="serialNumber"
+                            (keyup.enter)="onSearch()" /></span>
+                </div>
+                <div class="grid col-12 md:col-4">
+                    <span class="col-3" style="text-align:right"><label> Ngày Nhập</label></span>
+                    <span class="col-8">
+                        <p-calendar [style]="{'width':'100%'}" selectionMode="range" formControlName="date"
+                            dateFormat="dd/mm/yy" (keyup.enter)="onSearch()">
+                        </p-calendar>
+                    </span>
+                </div>
+            </div>
+            <div class="grid w-12">
+                <div class="grid col-12 md:col-4">
+                    <span class="col-4" style="text-align:right"><label>Loại Thiết Bị</label></span>
+                    <span class="col-8">
+                        <p-dropdown [autoWidth]="false" placeholder="Chọn loại thiết bị" [showClear]="true"
+                            [options]="equipmentCategory" optionLabel="name" optionValue="value"
+                            formControlName="category"></p-dropdown>
+                    </span>
+                </div>
+                <div class="grid col-12 md:col-4">
+                    <span class="col-3" style="text-align:right"><label>Trạng Thái</label></span>
+                    <span class="col-9">
+                        <p-dropdown [autoWidth]="false" placeholder="Chọn trạng thái" [showClear]="true"
+                            [options]="equipmentStatus" optionLabel="name" optionValue="value"
+                            formControlName="status"></p-dropdown>
+                    </span>
+                </div>
+                <div class="grid col-12 md:col-4">
+                    <span class="col-3" style="text-align:right"><label> Nhân Viên</label></span>
+                    <span class="col-8">
+                        <p-multiSelect [options]="employeeList" optionLabel="name" placeholder="Chọn nhân viên sử dụng"
+                            [showClear]="true" optionValue="value" [style]="{'width':'100%'}"
+                            formControlName="employeeList">
+                        </p-multiSelect>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 md:col-1">
+            <button pButton icon="pi pi-search p-button-raised" label="Tìm Kiếm" (click)="onSearch()"></button>
+        </div>
+    </div>
+    <div>
+        <div class="flex flex-row align-items-center justify-content-between">
+            <div class="ml-2 text-lg font-medium flex flex-row align-items-center">
+                <button pButton pRipple class="p-button-outlined mr-3" icon="pi pi-plus" label="Thêm Mới"
+                    (click)="openDetailDialog(null)"></button>
+                Số bản ghi: {{recordStart}}-{{recordEnd}} (Tổng số {{totalRecord}})
+            </div>
+            <div>
+                <p-paginator [rows]="pageSize" [totalRecords]="totalRecord" [pageLinkSize]="pageLinkSize"
+                    (onPageChange)="pageClick($event)" #paginator>
+                </p-paginator>
+            </div>
+
+        </div>
+        <p-table [columns]="equipmentCols" [value]="equipmentList" styleClass="p-datatable-gridlines p-datatable-xl"
+            selectionMode="single">
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    <col *ngFor="let col of columns" [style.width]="col.width">
+                </colgroup>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th style="text-align: center" *ngFor="let col of columns">
+                        {{ col.header }}
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-equip>
+                <tr [pSelectableRow]="equip">
+                    <td style="text-align: left">
+                        <button pButton pRipple type="button" icon="pi pi-pencil" (click)="openDetailDialog(equip.id)"
+                            class="p-button-rounded p-button-text p-button-info"></button>
+                    </td>
+                    <td style="text-align: left">{{equip.name}}</td>
+                    <td style="text-align: left">{{equip.serialNumber}}</td>
+                    <td style="text-align: left">{{equip.category}}</td>
+                    <td style="text-align: left; white-space: pre-wrap;">{{equip.description}}</td>
+                    <td style="text-align: left ">
+                        <label>{{equip.employee}}</label>
+                    </td>
+                    <td style="text-align: center">
+                        <button pButton pRipple type="button" icon="pi pi-sync"
+                            (click)="userSwitchDialog(equip.id, equip.employee)"
+                            class="p-button-rounded p-button-text p-button-warning"></button>
+                    </td>
+                    <td style="text-align: left">{{equip.status}}</td>
+                    <td style="text-align: center">
+                        <button pButton pRipple type="button" icon="pi pi-info-circle"
+                            (click)="warrantyDetailDialog(equip.id)"
+                            class="p-button-rounded p-button-text p-button-info"></button>
+                    </td>
+                    <td style="text-align: center">
+                        <button pButton pRipple type="button" icon="bx bx-notepad" (click)="openHistoryDialog(equip.id)"
+                            class="p-button-rounded p-button-text p-button-info"></button>
+                    </td>
+                    <td style="text-align: center">
+                        <button pButton pRipple type="button" icon="pi pi-times"
+                            (click)="confirmDelete(equip.id, $event)"
+                            class="p-button-rounded p-button-text p-button-danger"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+<!--  -->
+<!-- *** dialog view warranty detail *** -->
+<p-dialog header="Thông Tin Bảo Hành" [(visible)]="isWarrantyViewing" [modal]="true" [style]="{'width': '50%'}">
+    <p-table [value]="warrantyDetail">
+        <ng-template pTemplate="colgroup">
+            <colgroup>
+                <col style="width: 20%">
+                <col style="width: 20%">
+                <col style="width: 20%">
+                <col style="width: 20%">
+                <col style="width: 20%">
+            </colgroup>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="text-align: center">Tên Thiết Bị</th>
+                <th style="text-align: center">Số Seri</th>
+                <th style="text-align: center">Ngày Nhập</th>
+                <th style="text-align: center">Nhà Cung Cấp</th>
+                <th style="text-align: center">Thời Hạn Bảo Hành</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+            <tr>
+                <td style="text-align: center">{{item.name}}</td>
+                <td style="text-align: center">{{item.serialNumber}}</td>
+                <td style="text-align: center">{{item.importDate}}</td>
+                <td style="text-align: center">{{item.vendor}}</td>
+                <td style="text-align: center">{{item.warrantyTime}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-dialog>
+<!--  -->
+<!-- *** dialog switch user *** -->
+<p-dialog header="Thay Đổi Sở Hữu Thiết Bị" [(visible)]="isSwitchingUser" [modal]="true" [style]="{'width': '25%'}">
+    <div class="mb-2">
+        <label class="font-medium mr-2"> Sở Hữu Hiện Tại: </label>
+        <label>{{currentSwitchingEmployee?currentSwitchingEmployee:'Chưa Có'}}</label>
+    </div>
+    <p-table #listTb [value]="employeeList" [rows]="7" [paginator]="true" [globalFilterFields]="['name']"
+        selectionMode="single" [selection]="true" (onRowSelect)="onRowSelect($event)" [(selection)]="selectedEmployee">
+        <ng-template pTemplate="caption">
+            <span class="p-input-icon-right p-ml-auto">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" class="p-inputtext-sm"
+                    (input)="listTb.filterGlobal($event.target.value, 'contains')" placeholder="Search keyword" />
+            </span>
+        </ng-template>
+        <ng-template pTemplate="body" let-emp>
+            <tr [pSelectableRow]="emp">
+                <td>{{emp.name}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-dialog>
+<!--  -->
+<!-- *** confirm dialog *** -->
+<p-confirmDialog header="Xác Nhận" icon="pi pi-exclamation-triangle" baseZIndex="2"></p-confirmDialog>
+<!--  -->
+<p-toast></p-toast>

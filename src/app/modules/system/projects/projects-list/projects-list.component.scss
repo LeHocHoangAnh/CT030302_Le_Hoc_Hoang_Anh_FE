@@ -1,0 +1,77 @@
+.page-from {
+  text-align: center;
+}
+
+.create-and-page {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+:host ::ng-deep .p-button-outlined {
+  padding: 0 5px;
+  width: 85px;
+  height: 40px;
+  align-items: center;
+}
+
+.btn-delete {
+  padding: 0;
+  // height: 25px !important;
+  // width: 25px;
+}
+
+.field-view {
+  margin-right: 17px;
+}
+
+.field-view label {
+  // font-size: 14px;
+  font-weight: 600;
+}
+
+.title-header {
+  text-align: start;
+  font-weight: 500;
+  font-size: 20px;
+  margin: 5px 0;
+}
+
+:host ::ng-deep .custom-tb {
+  margin-left: 10px;
+  width: 12rem;
+  padding: 3px;
+  font-size: 14px;
+}
+
+.search-employee {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-tb {
+  border: 1px solid #ced4da;
+  // outline: none;
+}
+
+.succer-button {
+  width: 50px;
+  height: 30px;
+}
+
+.cancel-buttn {
+  width: 50px;
+  height: 30px;
+}
+
+:host ::ng-deep .p-confirm-dialog-reject {
+  height: 40px;
+  width: 120px !important;
+}
+
+:host ::ng-deep .p-confirm-dialog-accept {
+  height: 40px;
+  width: 120px !important;
+}

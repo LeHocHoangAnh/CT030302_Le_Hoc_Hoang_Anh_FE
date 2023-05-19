@@ -1,0 +1,59 @@
+<div class="card border-0 sm:p-2">
+  <div id="list" class="flex flex-column">
+    <div id="search-by-year" class="mb-3 w-full flex flex-row justify-content-center align-items-center ">
+      <label for="search-filter">Tìm theo năm</label>
+      <p-dropdown id="search-filter" [options]="yearRange" placeholder="Năm" [showClear]="true"
+        [(ngModel)]="selectedYear" class="ml-2">
+      </p-dropdown>
+      <button pButton label="Tìm kiếm" type="submit" icon="pi pi-search" class="p-button-outlined ml-2"
+        (click)="onSearch()"></button>
+    </div>
+    <div>
+      <button pButton type="button" class="p-button-outlined mb-2" label="Thêm mới" (click)="triggerDialog(null)"
+        icon="pi pi-plus"></button>
+      <p-table [columns]="columns" [resizableColumns]="true" [value]="dayOffs"
+        styleClass="p-datatable-gridlines p-datatable-striped p-datatable-sm" responsiveLayout="scroll">
+        <ng-template pTemplate="colgroup">
+          <colgroup>
+            <col style="width: 10%" />
+            <col style="width: 20%" />
+            <col style="width: 20%" />
+            <col style="width: 40%" />
+            <col style="width: 10%" />
+          </colgroup>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th *ngFor="let column of columns" style="text-align: center">
+              {{ column.header }}
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-dayoff>
+          <tr>
+            <td style="text-align: center">
+              <button pButton pRipple type="button" (click)="triggerDialog(dayoff)" icon="pi pi-pencil"
+                class="p-button-rounded p-button-text p-button-info btn-delete"></button>
+            </td>
+            <td style="text-align: center">{{ dayoff.dayFrom }}</td>
+            <td style="text-align: center">{{ dayoff.dayTo }}</td>
+            <td style="text-align: center">{{ dayoff.reasonApply }}</td>
+            <td style="text-align: center">
+              <button pButton pRipple type="button" (click)="confirmDelete('top',dayoff.id)" icon="pi pi-times"
+                class="p-button-rounded p-button-text p-button-danger btn-delete"></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>
+<p-confirmDialog #cd [style]="{ width: '30vw' }" key="positionDialog" [position]="position"
+  rejectButtonStyleClass="p-button-outlined">
+  <ng-template pTemplate="footer">
+    <button type="button" class="succer-button" [style]="{ padding: '5px 10px' }" pButton
+      (click)="cd.accept()"></button>
+    <button type="button" class="cancel-button" pButton (click)="cd.reject()"></button>
+  </ng-template>
+</p-confirmDialog>
+<p-toast></p-toast>

@@ -1,0 +1,419 @@
+<!-- *** web view -->
+<div style="width:100%">
+  <div>
+    <button pButton pRipple type="button" label="Quay lại" class="p-button-rounded p-button-success "
+      (click)="submitChange()">
+      <div class="pr-2">
+        <i class="pi pi-arrow-left"></i>
+      </div>
+    </button>
+  </div>
+  <div class="title-header">
+    <span>{{addoredit}}</span>
+  </div>
+  <div class="flex flex-column md:flex-row content-employee">
+    <div class="mb-3 mr-3 flex md:block flex-row justify-content-center flex-wrap">
+      <div class="avatar-outside card text-center border-light shadow-sm p-0">
+        <div class="avatar">
+          <div class="avatar-preview">
+            <div id="imagePreview" *ngIf="image !== null || uploadImg !== null">
+              <img [src]="uploadImg !== null ? uploadImg:image">
+            </div>
+          </div>
+        </div>
+        <button *ngIf="isLeader == false && (image !== null || uploadImg !== null)" class="t-comparison-item__close"
+          (click)="removeImg()">
+          <div class="t-comparison-item__close-wrapper">
+            <i class="pi pi-times"></i>
+          </div>
+        </button>
+      </div>
+      <div *ngIf="isLeader == false" class="input-type-file w-full">
+        <input id="file" (change)="onUpload($event)" type="file" accept="image/*" #file />
+        <button pButton pRipple class="p-button-success" (click)="file.click()" [style]="{width:'80%'}" label="Tải ảnh">
+          <i class="pi pi-upload" style="transform: translate(0px,0px);">
+          </i>
+        </button>
+      </div>
+    </div>
+    <form [formGroup]="formData" class="create">
+      <table class="table-edit" style="height:100%">
+        <colgroup>
+          <col span="1" [style.width]="mobileScreen?'33.3333%':'15%'">
+          <col span="1" [style.width]="mobileScreen?'66.6667%':'85%'">
+        </colgroup>
+        <tbody>
+          <tr>
+            <td>
+              Mã Nhân Viên
+              <label class="kinda-important">{{notNull}}</label>
+            </td>
+            <td>
+              <input [style]="{ width: mobileScreen?'100%':'40%' }" type="text" pInputText class="input-data"
+                maxlength="50" [(ngModel)]="lastEmployee" name="employeeCode" formControlName="employeeCode"
+                (input)="eventOnchange()" [ngClass]="{
+                'ng-dirty': isSubmited && f.employeeCode.errors
+              }" />
+              <div *ngIf="isSubmited && f.employeeCode.errors" class="p-error mx-2">
+                {{ mes.MES_7 }}
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="tbl-label">
+              Họ Tên
+              <label class="kinda-important">{{notNull}}</label>
+            </td>
+            <td>
+              <input [style]="{ width: mobileScreen?'100%':'40%' }" type="text" pInputText class="input-data"
+                maxlength="50" name="fullName" (input)="eventOnchange()" formControlName="fullName" [ngClass]="{
+                'ng-dirty': isSubmited && f.fullName.errors
+              }" />
+              <div *ngIf="isSubmited && f.fullName.errors" class="p-error mx-2">
+                {{ mes.MES_7 }}
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Giới Tính</td>
+            <td class="flex align-items-center">
+              <div class="formgroup-inline">
+                <div class="field-radiobutton">
+                  <input type="radio" id="male" [value]="true" (input)="eventOnchange()" formControlName="gender" />
+                  <label for="male">Nam</label>
+                </div>
+                <div class="field-radiobutton">
+                  <input type="radio" id="female" [value]="false" (input)="eventOnchange()" formControlName="gender" />
+                  <label for="female">Nữ</label>
+                </div>
+              </div>
+              <div *ngIf="isSubmited && f.gender.errors" class="p-error align-items-center mx-2">
+                <div *ngIf="f.gender.errors">{{ mes.MES_8 }}</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Ngày Sinh</td>
+            <td style="overflow:visible">
+              <p-calendar [style]="{ width: mobileScreen?'100%':'40%' }" [style]="{ width: '250px'}"
+                (input)="eventOnchange()" [(ngModel)]="date3" [monthNavigator]="true" [yearNavigator]="true"
+                yearRange="1945:2030" inputId="navigators" placeholder="yyyy-mm-dd" icon="pi pi-calendar"
+                dateFormat="dd-mm-yy" [showIcon]="true" dataType="string" name="dateEntry" class="p-inputwrapper"
+                formControlName="dateOfBirth" appendTo="body" [ngClass]="{
+                'ng-dirty': isSubmited && f.dateOfBirth.errors
+              }">
+              </p-calendar>
+              <div *ngIf="isSubmited && f.dateOfBirth.errors" class="p-error mx-2">
+                {{ mes.MES_7 }}
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Địa Chỉ Hiện Tại</td>
+            <td>
+              <textarea [style]="{ width: mobileScreen?'100%':'40%' }" type="text" [rows]="2" (input)="eventOnchange()"
+                pInputTextarea name="address" formControlName="address" [ngClass]="{
+              'ng-dirty': isSubmited && f.address.errors
+            }"></textarea>
+              <div *ngIf="isSubmited && f.address.errors" class="p-error mx-2">
+                {{ mes.MES_7 }}
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Địa Chỉ Quê Quán</td>
+            <td>
+              <textarea [style]="{ width: mobileScreen?'100%':'40%' }" type="text" [rows]="2" (input)="eventOnchange()"
+                pInputTextarea name="address" formControlName="permAddress" [ngClass]="{
+              'ng-dirty': isSubmited && f.address.errors
+            }"></textarea>
+              <div *ngIf="isSubmited && f.address.errors" class="p-error mx-2">
+                {{ mes.MES_7 }}
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Số Điện Thoại
+              <label class="kinda-important">{{notNull}}</label>
+            </td>
+            <td>
+              <input [style]="{ width: mobileScreen?'100%':'40%' }" type="text" pInputText (input)="eventOnchange()"
+                class="input-data" maxlength="50" name="phoneNumber" formControlName="phoneNumber" [ngClass]="{
+                'ng-dirty': isSubmited && f.phoneNumber.errors
+              }" />
+              <div *ngIf="isSubmited && f.phoneNumber.errors" class="p-error mx-2">
+                {{ mes.MES_7 }}
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Email
+              <label class="kinda-important">{{notNull}}</label>
+            </td>
+            <td>
+              <input [style]="{ width: mobileScreen?'100%':'40%' }" type="text" (input)="eventOnchange()" pInputText
+                class="input-data" maxlength="50" name="email" formControlName="email" [ngClass]="{
+                'ng-dirty': isSubmited && f.email.errors
+              }" />
+              <div *ngIf="isSubmited && f.email.errors" class="p-error mx-2">
+                {{ mes.MES_7 }}
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="isLeader == false">
+            <td>
+              Mật Khẩu
+              <label class="kinda-important">{{notNull}}</label>
+            </td>
+            <td>
+              <span class="p-input-icon-right" [style.width]="mobileScreen?'100%':'40%'">
+                <i (click)="hide =!hide" [class]="hide ? 'pi pi-eye': 'pi pi-eye-slash'"></i>
+                <input [style]="{ width: '100%' }" [type]="hide ? 'password':'text'" pInputText
+                  (input)="eventOnchange()" class="input-password" maxlength="50" name="password"
+                  formControlName="password" [ngClass]="{
+                'ng-dirty': isSubmited && f.password.errors
+              }" />
+              </span>
+              <div *ngIf="isSubmited && f.password.errors" class="p-error mx-2">
+                {{ mes.MES_7 }}
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Chức Vụ</td>
+            <td class="flex flex-wrap">
+              <div *ngFor="let role of checkboxRoles" class="field-checkbox">
+                <p-checkbox value="role.value" [value]="role.value" (onChange)="eventOnchange()"
+                  formControlName="selectedRoles" [(ngModel)]="selectedRoles" [inputId]="role.value"
+                  (onChange)="checkedCheckbox(role.value)">
+                </p-checkbox>
+                <label class="ml-1 mr-2 md:mr-3" [for]="role.value">{{role.name}}</label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Hợp Đồng</td>
+            <td class="flex align-items-center flex-wrap">
+              <div class="formgroup-inline grid w-full">
+                <div class="field-radiobutton col-5 md:col-2">
+                  <input type="radio" id="ct" [value]="1" (input)="eventOnchange()" formControlName="typeContract" />
+                  <label for="ct">Chính Thức</label>
+                </div>
+                <div class="field-radiobutton col-5 md:col-2">
+                  <input type="radio" id="tv" [value]="2" (input)="eventOnchange()" formControlName="typeContract" />
+                  <label for="tv">Thử Việc</label>
+                </div>
+                <div class="field-radiobutton col-5 md:col-2">
+                  <input type="radio" id="tt" [value]="3" (input)="eventOnchange()" formControlName="typeContract" />
+                  <label for="tt">Freelance</label>
+                </div>
+                <div class="field-radiobutton col-5 md:col-2">
+                  <input type="radio" id="fr" [value]="4" (input)="eventOnchange()" formControlName="typeContract" />
+                  <label for="fr">Thực Tập</label>
+                </div>
+              </div>
+              <div *ngIf="isSubmited && f.typeContract.errors" class="p-error align-items-center mx-2">
+                <div *ngIf="f.typeContract.errors">{{ mes.MES_8 }}</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Ngày Review Kế Tiếp</td>
+            <td>
+              <p-calendar [style]="{ width: mobileScreen?'100%':'40%' }" [monthNavigator]="true" [yearNavigator]="true"
+                yearRange="2000:2030" inputId="navigators" placeholder="dd-mm-yyyy" icon="pi pi-calendar"
+                dateFormat="dd-mm-yy" [showIcon]="true" dataType="string" name="dateEntry" class="p-inputwrapper"
+                appendTo="body" formControlName="reviewDate" [ngClass]="{
+                'ng-dirty': isSubmited && f.dateEntry.errors
+              }" (onShow)="eventOnchange()">
+              </p-calendar>
+              <div *ngIf="isSubmited && f.dateEntry.errors" class="p-error mx-2">
+                {{ mes.MES_7 }}
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Trạng Thái</td>
+            <td class="flex align-items-center">
+              <div class="formgroup-inline">
+                <div class="field-radiobutton">
+                  <input type="radio" id="is" [value]="1" (input)="eventOnchange()" formControlName="status" />
+                  <label for="is">Trực Tiếp</label>
+                </div>
+                <div class="field-radiobutton">
+                  <input type="radio" id="os" [value]="0" (input)="eventOnchange()" formControlName="status" />
+                  <label for="os">Onsite</label>
+                </div>
+                <div class="field-radiobutton">
+                  <input type="radio" id="os" [value]="2" (input)="eventOnchange()" formControlName="status" />
+                  <label for="os">Remote</label>
+                </div>
+              </div>
+              <div *ngIf="isSubmited && f.status.errors" class="p-error align-items-center mx-2">
+                <div *ngIf="f.status.errors">{{ mes.MES_8 }}</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Ngày Bắt Đầu</td>
+            <td class="">
+              <p-calendar [style]="{ width: mobileScreen?'100%':'40%' }" [monthNavigator]="true"
+                (onShow)="eventOnchange()" [yearNavigator]="true" yearRange="2000:2030" inputId="navigators"
+                placeholder="dd-mm-yyyy" icon="pi pi-calendar" dateFormat="dd-mm-yy" [showIcon]="true" dataType="string"
+                name="dateEntry" class="p-inputwrapper" appendTo="body" formControlName="dateEntry" [ngClass]="{
+                'ng-dirty': isSubmited && f.dateEntry.errors
+              }">
+              </p-calendar>
+              <div *ngIf="isSubmited && f.dateEntry.errors" class="p-error mx-2">
+                {{ mes.MES_7 }}
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Ngày Kết Thúc</td>
+            <td class="">
+              <p-calendar [style]="{ width: mobileScreen?'100%':'40%' }" [monthNavigator]="true"
+                (onShow)="eventOnchange()" [yearNavigator]="true" yearRange="2000:2030" inputId="navigators"
+                placeholder="dd-mm-yyyy" icon="pi pi-calendar" dateFormat="dd-mm-yy" [showIcon]="true" dataType="string"
+                name="dateOut" class="p-inputwrapper" appendTo="body" [disabled]="formData.value.dateOut===null"
+                formControlName="dateOut" [ngClass]="{
+                'ng-dirty': isSubmited && f.dateOut.errors
+              }">
+              </p-calendar>
+              <div *ngIf="isSubmited && f.dateOut.errors" class="p-error mx-2">
+                {{ mes.MES_7 }}
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Phòng Ban</td>
+            <td>
+              <p-dropdown [style]="{ width: mobileScreen?'100%':'40%' }" placeholder="Chọn Phòng Ban"
+                (onClick)="eventOnchange()" optionLabel="name" optionValue="value" [options]="dropdownDepartment"
+                formControlName="department" [showClear]="true" [ngClass]="{
+                'ng-dirty': isSubmited && f.department.errors
+              }"></p-dropdown>
+              <div *ngIf="isSubmited && f.department.errors" class="p-error mx-2">
+                {{ mes.MES_7 }}
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Công Việc</td>
+            <td>
+              <span>
+                <p-dropdown [style]="{'width':!mobileScreen?'40%':formData.value.workName===otherPosition?'70%':'100%'}"
+                  placeholder="Chọn Công Việc" (onClick)="eventOnchange()" optionLabel="name" optionValue="name"
+                  [options]="dropdownWork" formControlName="workName" [showClear]="true" #dropdown></p-dropdown>
+                <!-- If the "Khác" is chosen in the workName dropdown -->
+              </span>
+              <span *ngIf="formData.value.workName===otherPosition">
+                <input [style]="{ width: '25%' }" pInputText type="text" class="ml-2" formControlName="otherWorkName">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>Tên Ngân Hàng/CN</td>
+            <td>
+              <input [style]="{ width: mobileScreen?'100%':'40%' }" type="text" pInputText class="input-data"
+                maxlength="50" name="bankName" (input)="eventOnchange()" formControlName="bankName" [ngClass]="{
+                'ng-dirty': isSubmited && f.taxCode.errors
+              }" />
+              <div *ngIf="isSubmited && f.taxCode.errors" class="p-error mx-2">
+                {{ mes.MES_7 }}
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Số Tài Khoản</td>
+            <td>
+              <input [style]="{ width: mobileScreen?'100%':'40%' }" type="text" pInputText numbersOnly
+                class="input-data" (input)="eventOnchange()" maxlength="50" name="bankAccount"
+                formControlName="bankAccount" [ngClass]="{
+                'ng-dirty': isSubmited && f.taxCode.errors
+              }" />
+              <div *ngIf="isSubmited && f.taxCode.errors" class="p-error mx-2">
+                {{ mes.MES_7 }}
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Mã Số Thuế</td>
+            <td>
+              <input [style]="{ width: mobileScreen?'100%':'40%' }" type="text" pInputText numbersOnly
+                class="input-data" (input)="eventOnchange()" maxlength="50" name="taxCode" formControlName="taxCode"
+                [ngClass]="{
+                'ng-dirty': isSubmited && f.taxCode.errors
+              }" />
+              <div *ngIf="isSubmited && f.taxCode.errors" class="p-error mx-2">
+                {{ mes.MES_7 }}
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Mã Số Bảo Hiểm</td>
+            <td>
+              <input [style]="{ width: mobileScreen?'100%':'40%' }" type="text" pInputText numbersOnly
+                class="input-data" (input)="eventOnchange()" maxlength="50" name="safeCode" formControlName="safeCode"
+                [ngClass]="{
+                'ng-dirty': isSubmited && f.safeCode.errors
+              }" />
+              <div *ngIf="isSubmited && f.safeCode.errors" class="p-error mx-2">
+                {{ mes.MES_7 }}
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Lương Cơ Bản</td>
+            <td>
+              <input [style]="{ width: mobileScreen?'100%':'40%' }" type="text" pInputText numbersOnly
+                class="input-data" (input)="eventOnchange()" maxlength="50" name="salaryBasic"
+                formControlName="salaryBasic" [ngClass]="{
+                'ng-dirty': isSubmited && f.salaryBasic.errors
+              }" />
+              <div *ngIf="isSubmited && f.salaryBasic.errors" class="p-error mx-2">
+                {{ mes.MES_7 }}
+              </div>
+            </td>
+          </tr>
+          <!-- <tr>
+            <td>Discord User ID</td>
+            <td>
+              <input [style]="{ width: mobileScreen?'100%':'40%' }" type="text" pInputText numbersOnly class="input-data" (input)="eventOnchange()" maxlength="50"
+                name="salaryBasic" formControlName="discordId" [ngClass]="{
+                'ng-dirty': isSubmited && f.discordId.errors
+              }" />
+              <div *ngIf="isSubmited && f.discordId.errors" class="p-error mx-2">
+                {{ mes.MES_7 }}
+              </div>
+            </td>
+          </tr> -->
+          <tr *ngIf="isLeader == false">
+            <td></td>
+            <div class="save-full col-12">
+              <button pButton pRipple type="button" style="font-weight: 500; background-color: #ea733b; color:black"
+                [disabled]="cancelDisableFlag" label="Hủy" (click)="submitChange()" class="btn-save mr-0"></button>
+              <button pButton pRipple type="button" style="font-weight: 500;" label="Lưu"
+                (click)="formData.value.workName===otherPosition? patchOtherPosition() : null; saveEmployee()"
+                class="btn-save"></button>
+            </div>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
+</div>
+<!-- end web view *** -->
+<!-- *** dialog -->
+<p-toast position="top-right"></p-toast>
+<p-dialog header="Rời khỏi trang web ?" [(visible)]="displayPosition" [position]="position" [modal]="true"
+  [style]="{width: '50vh'}" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
+  <p class="pl-3">Các thay đổi bạn đã thực hiện có thể không được lưu.</p>
+  <ng-template pTemplate="footer">
+    <p-button icon="pi pi-times" (click)="backToList()" label="Rời khỏi"></p-button>
+    <button pButton icon="pi pi-check" (click)="displayPosition=false" label="Huỷ" class=" p-button-outlined"
+      #confirmBackBtn></button>
+  </ng-template>
+</p-dialog>

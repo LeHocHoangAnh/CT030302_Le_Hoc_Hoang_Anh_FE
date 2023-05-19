@@ -1,0 +1,102 @@
+<div class="content-timekeeping md:px-3">
+  <p-tabView *ngIf="screenWidth<999">
+    <p-tabPanel header="Bảng công" leftIcon="pi pi-calendar">
+      <ng-container [ngTemplateOutlet]="calendarTemplate"></ng-container>
+      <ng-container [ngTemplateOutlet]="annotationTemplate"></ng-container>
+    </p-tabPanel>
+    <p-tabPanel header="Thông tin trong tháng" leftIcon="pi pi-book">
+      <ng-container [ngTemplateOutlet]="inMonthSummaryTemplate"></ng-container>
+    </p-tabPanel>
+  </p-tabView>
+  <div *ngIf="screenWidth>=999" class="grid justify-content-between">
+    <div class="pr-3 col-12 md:col-9">
+      <div class="my-2">
+        <p-calendar placeholder="Chọn thời gian" [showIcon]="true" [(ngModel)]="selectedDate" dateFormat="mm/yy"
+          view="month" (onSelect)="dateOption()"></p-calendar>
+      </div>
+      <ng-container [ngTemplateOutlet]="calendarTemplate"></ng-container>
+    </div>
+    <div class="col-12 md:col-3" style="margin-top:4%">
+      <!-- <div class="">
+        <h4 style="margin-top: 55px" class="mb-3">Thông tin trong năm</h4>
+      </div> -->
+      <!-- <div class="mb-3">
+        <h4>Thông tin trong tháng</h4>
+        <ng-container [ngTemplateOutlet]="inMonthSummaryTemplate"></ng-container>
+      </div> -->
+      <div class="mb-3">
+        <ng-container [ngTemplateOutlet]="annotationTemplate"></ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- start of template outlets -->
+<ng-template #calendarTemplate>
+  <full-calendar id="calendar" #calendar [options]="calendarOptions"></full-calendar>
+</ng-template>
+<!-- <ng-template #inMonthSummaryTemplate>
+  <ul class="summary">
+    <li>
+      <span>Nghỉ phép còn đến hiện tại: </span>
+      <i>{{overallDetailKeeping?overallDetailKeeping.leaveRemainNow:0}} ngày</i>
+    </li>
+    <li>
+      <span>Nghỉ bù còn đến hiện tại: </span>
+      <i>{{overallDetailKeeping?overallDetailKeeping.csrLeaveNow:0}} ngày</i>
+    </li>
+    <li>
+      <span>Ngày nghỉ có xin phép: </span>
+      <i>{{totalDayOffAccepted}} ngày</i>
+    </li>
+    <li>
+      <span>Ngày nghỉ không xin phép: </span>
+      <i>{{timeKeepingSummary?.countTotalDayOffNoAccept?timeKeepingSummary.countTotalDayOffNoAccept:0}} ngày</i>
+    </li>
+    <li>
+      <span>Ngày Remote: </span>
+      <i>{{timeKeepingSummary?timeKeepingSummary.countTotalRemoteTime:overallDetailKeeping?overallDetailKeeping.remoteTime:0}}
+        ngày</i>
+    </li>
+    <li>
+      <span>Công thực: </span>
+      <i>{{timeKeepingSummary?.countTotalStandardWorkDay ? (timeKeepingSummary?.countTotalStandardWorkDay +
+        timeKeepingSummary?.totalForgotTimeKeepingAccept) : 0}}
+        ngày</i>
+    </li>
+    <li>
+      <span>Số lần quên chấm công: </span>
+      <i *ngIf="timeKeepingSummary">
+        {{timeKeepingSummary?.totalForgotTimeKeeping?timeKeepingSummary.totalForgotTimeKeeping:0}} lần</i>
+      <i *ngIf="!timeKeepingSummary">
+        {{overallDetailKeeping? overallDetailKeeping.keepingForget:0}} lần
+      </i>
+    </li>
+    <li>
+      <span>Thời gian đi muộn/ về sớm/ ra ngoài</span>
+      <div class="ml-3">
+    <li class="my-1">Có phép: {{overallDetailKeeping?overallDetailKeeping.lateHour:0}}</li>
+    <li class="my-1">Không phép: {{timeKeepingSummary?.totalTimeLate? timeKeepingSummary.totalTimeLate:0}}</li>
+    <li class="my-1">Đi muộn thực tế: {{timeKeepingSummary?.seriouslyTotalTimeLate?
+      timeKeepingSummary.seriouslyTotalTimeLate:0}}</li>
+    </div>
+    </li>
+    <li>
+      <span>Số lần đi muộn/ về sớm/ ra ngoài </span>
+      <div class="ml-3">
+    <li class="my-1">Có phép: {{overallDetailKeeping?overallDetailKeeping.lateTime:0}} ngày</li>
+    <li class="my-1">Không phép: {{timeKeepingSummary?.countTotalDayLate?timeKeepingSummary.countTotalDayLate:0}} ngày
+    </li>
+    </div>
+    </li>
+  </ul>
+</ng-template> -->
+<!-- <ng-template #annotationTemplate>
+  <h5>Chú thích :</h5>
+  <ul class="pl-0 md:pl-3" style="list-style-type: none">
+    <li><label class="label success"></label>Đi đúng giờ/Đồng ý</li>
+    <li><label class="label warning"></label>Chờ phê duyệt</li>
+    <li><label class="label danger"></label>Đi muộn-về sớm/Không đồng ý</li>
+  </ul>
+</ng-template> -->
+<!-- end of template outlets -->
+<p-toast baseZIndex="999" position="top-right"></p-toast>

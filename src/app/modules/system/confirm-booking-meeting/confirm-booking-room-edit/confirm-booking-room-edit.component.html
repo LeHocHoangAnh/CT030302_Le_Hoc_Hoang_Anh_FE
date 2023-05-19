@@ -1,0 +1,57 @@
+<div class="container-confirm-edit">
+    <table class="w-full table-confirm-edit">
+      <tr class= "col-12">
+        <td class="td-title"><label class="label-title">Tên Nhân Viên</label></td>
+        <td class="td-content"><label class="label-content">{{detail?.employeeName}}</label></td>
+      </tr>
+      <tr class= "col-12">
+       <td class="td-title"><label class="label-title">Tên phòng</label></td>
+       <td class="td-content"><label class="label-content">{{detail?.roomName}}</label></td>
+     </tr>
+     <tr class= "col-12">
+       <td class="td-title"><label class="label-title">Định Kỳ</label></td>
+       <td class="td-content"><label class="label-content">{{detail?.periodType==0?'Trong Ngày':'Hàng Ngày'}}</label></td>
+     </tr>
+     <tr class= "col-12" *ngIf="daysOfWeek.length>0">
+      <td class="td-title"><label class="label-title">Ngày Trong Tuần</label></td>
+      <td class="td-content"><label class="label-content">{{daysOfWeek}}</label></td>
+    </tr>
+     <tr class= "col-12">
+       <td class="td-title"><label class="label-title">Ngày Yêu Cầu</label></td>
+       <td class="td-content"><label class="label-content">{{detail?.timeStart | date:'yyyy-MM-dd HH:mm:ss':'UTC+7'}}</label></td>
+     </tr>
+     <tr class= "col-12">
+       <td class="td-title"><label class="label-title">Ngày Kết Thúc</label></td>
+       <td class="td-content"><label class="label-content">{{detail?.timeEnd | date:'yyyy-MM-dd HH:mm:ss':'UTC+7'}}</label></td>
+     </tr>
+     <tr class= "col-12">
+       <td class="col-3 td-title"><label class="label-title">Lý Do</label></td>
+       <td class="col-9"><textarea rows="5" readonly class="w-full text-area" [value]="detail?.reason" pInputTextarea autoResize="autoResize"></textarea></td>
+     </tr>
+     <tr class= "col-12">
+       <td class="td-title"><label class="label-title">Trạng Thái</label></td>
+       <td class="td-content"><div class="formgroup-inline">
+         <div class="field-radiobutton">
+            <p-radioButton label="Chờ Xác Nhận" [value]="0" [(ngModel)]="status" class="font-medium"></p-radioButton>
+         </div>
+         <div class="field-radiobutton">
+            <p-radioButton label="Xác Nhận" type="radio" [value]="1" [(ngModel)]="status" class="font-medium"></p-radioButton>
+         </div>
+         <div class="field-radiobutton">
+            <p-radioButton label="Từ Chối" type="radio" [value]="2" [(ngModel)]="status" class="font-medium"></p-radioButton>
+       </div>
+     </div></td>
+     </tr>
+    </table>
+    <div><button
+     pButton
+     pRipple
+     (click)="updateBooking()"
+     label="Lưu"
+     style="float: right"
+     type="submit"
+     icon="pi pi-check"
+   ></button></div>
+   </div>
+   <p-toast position="top-right"></p-toast>
+   

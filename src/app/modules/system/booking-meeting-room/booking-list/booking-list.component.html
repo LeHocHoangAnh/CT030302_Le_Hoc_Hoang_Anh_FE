@@ -1,0 +1,121 @@
+<div class="sm:p-2 content-timekeeping">
+  <p-sidebar [(visible)]="visibleSidebar" [style]="{ width: mobileScreen?'100%':'50em' }" position="right"
+    [baseZIndex]="10000">
+    <h5>Danh sách phòng họp</h5>
+    <button pButton pRipple label="Thêm phòng" icon="pi pi-plus" class="p-button-info p-mr-2 mb-2"
+      (click)="openNew()"></button>
+    <div class="card">
+      <p-table [value]="listRoom" dataKey="id" editMode="row" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+          <tr>
+            <th [style]="{ width: '40%', 'text-align': 'center' }">Tên phòng</th>
+            <th [style]="{ width: '30%', 'text-align': 'center' }">Trạng thái</th>
+            <th [style]="{ width: '15%', 'text-align': 'center' }">Màu</th>
+            <th style="width: 15%"></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-room let-editing="editing" let-ri="rowIndex">
+          <tr [pEditableRow]="room">
+            <td style="text-align: center">
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input pInputText [style]="{ width: '23em' }" type="text" [(ngModel)]="room.name" />
+                </ng-template>
+                <ng-template pTemplate="output"> {{ room.name }} </ng-template>
+              </p-cellEditor>
+            </td>
+            <td style="text-align: center">
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <p-dropdown [options]="statuses" optionLabel="label" optionValue="value" [(ngModel)]="room.status"
+                    [style]="{
+                      width: '100%',
+                      color: statuses.value == roomActive ? 'blue' : 'red'
+                    }"></p-dropdown>
+                </ng-template>
+                <ng-template pTemplate="output" style="color: blue">
+                  {{ room.status == roomActive ? statusActive : statusNotActive }}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td style="text-align: center">
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <p-colorPicker [(ngModel)]="room.displayColor"></p-colorPicker>
+                </ng-template>
+                <ng-template pTemplate="output"> <p-colorPicker [(ngModel)]="room.displayColor"
+                    [disabled]="true"></p-colorPicker> </ng-template>
+              </p-cellEditor>
+            </td>
+            <td style="text-align: center">
+              <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                (click)="onRowEditInit(room)" class="p-button-rounded p-button-text"></button>
+              <button *ngIf="!editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-times"
+                (click)="confirmDelete('top', room)" class="p-button-rounded p-button-text p-button-danger"></button>
+              <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+                (click)="onRowEditSave(room)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+              <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+                (click)="onRowEditCancel(room, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </p-sidebar>
+  <p-button *ngIf="checkEdit" type="button" class="p-button-outlined mr-2" (click)="onVisibleSidebar()">Thêm phòng họp
+  </p-button>
+  <form [formGroup]="formData">
+    <div class="my-2">
+      <label class="pr-2">Ngày đăng ký</label>
+      <p-calendar [defaultDate]="dateNow" [showIcon]="true" [showOnFocus]="false" [showOtherMonths]="false"
+        dateFormat="dd/mm/yy" formControlName="dateRequest" (onSelect)="searchByDate(0)"></p-calendar>
+      <button style="background-color: #2196f3; float: right" type="button" pButton pRipple icon="pi pi-plus"
+        label="Tạo" class="p-button-rounded" (click)="show(null, null, null, null, null)"></button>
+    </div>
+    <full-calendar #calendar [options]="calendarOptions" class="p-button-outlined"></full-calendar>
+  </form>
+</div>
+<p-confirmDialog #cd [style]="{ width: '30vw' }" key="positionDialogList" [position]="position"
+  rejectButtonStyleClass="p-button-outlined" [baseZIndex]="100000">
+  <ng-template pTemplate="footer">
+    <button type="button" pButton [label]="confirmYes" (click)="cd.accept()" [style]="{ width: '80px' }"></button>
+    <button type="button" class="cancel-button" pButton [label]="confirmNo" (click)="cd.reject()"></button>
+  </ng-template>
+</p-confirmDialog>
+<p-dialog [(visible)]="roomDialog" [baseZIndex]="10000000" [style]="{ width: mobileScreen?'70%':'450px' }"
+  header="Đăng ký phòng mới" [modal]="true" styleClass="p-fluid">
+  <ng-template class="custom-dialog" pTemplate="content">
+    <div class="p-3">
+      <div class="field">
+        <label>Tên phòng</label>
+        <input type="text" pInputText [(ngModel)]="nameReq" required autofocus />
+        <small class="p-error" *ngIf="submitted && nameReq == null">Yêu cầu nhập tên phòng.</small>
+      </div>
+      <div class="field">
+        <label>Trạng thái phòng</label>
+        <p-dropdown [(ngModel)]="statusReq" [options]="statuses" placeholder="Lựa chọn trạng thái" [ngClass]="{
+            'ng-dirty': submitted && statusReq == null
+          }">
+          <ng-template let-option pTemplate="item">
+            <span [class]="'Nhập trạng thái' + option.value">{{
+              option.label
+              }}</span>
+          </ng-template>
+        </p-dropdown>
+        <div *ngIf="submitted && statusReq == null" class="p-error">
+          <div *ngIf="statusReq == null">{{ validate.MES_NOT_SELECT }}</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Màu hiển thị</label>
+        <input type="color" pInputText [(ngModel)]="colorReq" required />
+        <small class="p-error" *ngIf="submitted && colorReq == null">Chọn màu hiển thị</small>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveRoom()"></button>
+  </ng-template>
+</p-dialog>
+<p-toast position="top-right" [baseZIndex]="1000000"></p-toast>

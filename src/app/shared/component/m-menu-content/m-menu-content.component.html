@@ -1,0 +1,128 @@
+<button pButton type="text" (click)="display = true" icon="pi pi-bars" class="p-button-outlined px-3 mr-2"
+    position="left"></button>
+<p-sidebar [(visible)]="display" position="left" [transitionOptions]="'1ms'">
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo-content">
+                <div class="flex flex-row align-items-center" (click)="display=false" routerLink="/home">
+                    <div class="img-profile">
+                        <img [src]="image" *ngIf="image !== null">
+                        <i class="bx bxs-user-circle" *ngIf="image === null"></i>
+                    </div>
+                    <div class="flex flex-column justify-content-between">
+                        <div class="name-profile" style="color:black;font-weight: 500;">{{dataProvider?.fullName}}</div>
+                        <div class="name-profile">{{dataProvider?.departmentName}}</div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <ul class="nav_list">
+                <li *ngIf="isHr || isLeader">
+                    <a routerLink="/employee/list/1" (click)="display=false" routerLinkActive="active-high-light">
+                        <i class='bx bx-male-female'></i>
+                        <span class="links_name">Danh Sách Nhân Viên</span>
+                    </a>
+                </li>
+                <li *ngIf="!isCustomer">
+                    <a routerLink="/time-keeping" (click)="display=false" routerLinkActive="active-high-light">
+                        <i class='bx bx-table'></i>
+                        <span class="links_name">Bảng Chấm Công</span>
+                    </a>
+                </li>
+                <!-- <li>
+              <a routerLink="/salary" routerLinkActive="active-high-light">
+                <i class='bx bx-money-withdraw'></i>
+                <span class="links_name">Bảng Lương</span>
+              </a>
+            </li> -->
+                <li *ngIf="isLeader">
+                    <a routerLink="/confirm-day-off" (click)="display=false" routerLinkActive="active-high-light">
+                        <i class='bx bx-checkbox-checked'></i>
+                        <span class="links_name">Phê Duyệt Tổng Hợp</span>
+                    </a>
+                </li>
+                <li *ngIf="isHr">
+                    <a (click)="display=false;notResponsivePageRoutingConfirm('/accountant')"
+                        routerLinkActive="active-high-light">
+                        <i class='bx bxs-calculator'></i>
+                        <span class="links_name">Tổng Hợp Chấm Công</span>
+                    </a>
+                </li>
+                <li *ngIf="isHr">
+                    <a routerLink="/day-off-management" (click)="display=false" routerLinkActive="active-high-light">
+                        <i class='bx bxs-calendar-star'></i>
+                        <span class="links_name">Quản Lý ngày Nghỉ Lễ</span>
+                    </a>
+                </li>
+                <li *ngIf="isHr">
+                    <a (click)="display=false;notResponsivePageRoutingConfirm('/projects-list')"
+                        routerLinkActive="active-high-light">
+                        <i class='bx bx-clipboard'></i>
+                        <span class="links_name">Quản Lý Dự Án</span>
+                    </a>
+                </li>
+                <li *ngIf="isHr">
+                    <a (click)="display=false;notResponsivePageRoutingConfirm('/departments-list')"
+                        routerLinkActive="active-high-light">
+                        <i class="bx bx-building"></i>
+                        <span class="links_name">Quản Lý Phòng Ban</span>
+                    </a>
+                </li>
+                <li>
+                    <a routerLink="/booking-meeting-room" (click)="display=false" routerLinkActive="active-high-light">
+                        <i class='bx bx-user-voice'></i>
+                        <span class="links_name">Đặt phòng họp</span>
+                    </a>
+                </li>
+                <li *ngIf="isHr">
+                    <a (click)="display=false;notResponsivePageRoutingConfirm('/equipment-manage')"
+                        routerLinkActive="active-high-light">
+                        <i class='pi pi-shopping-cart'></i>
+                        <span class="links_name">Quản Lý Thiết Bị</span>
+                    </a>
+                </li>
+                <li>
+                    <a routerLink="/equipment-register" (click)="display=false" routerLinkActive="active-high-light">
+                        <i class='bx bxs-cart-add'></i>
+                        <span class="links_name">Đăng Ký Thiết Bị</span>
+                    </a>
+                </li>
+                <!-- <li *ngIf="isHr">
+                    <a routerLink="/confirm-booking-meeting-room" (click)="display=false"
+                        routerLinkActive="active-high-light">
+                        <i class='bx bxs-user-check'></i>
+                        <span class="links_name">Phê duyệt phòng họp</span>
+                    </a>
+                </li> -->
+                <li>
+                    <a routerLink="/internal-document" (click)="display=false" routerLinkActive="active-high-light">
+                        <i class='bx bx-info-circle'></i>
+                        <span class="links_name"> Thông tin chung </span>
+                    </a>
+                </li>
+            </ul>
+
+            <hr />
+            <div>
+                <button pButton (click)="logout()" class="p-button-outlined" icon="pi pi-power-off"
+                    label="Đăng xuất"></button>
+            </div>
+        </div>
+    </div>
+</p-sidebar>
+<p-dialog [modal]="true" [(visible)]="confirmDisplay" [style]="{'width': '90%'}">
+    <ng-template pTemplate="header">
+        <h4>
+            Xác nhận điều hướng
+        </h4>
+    </ng-template>
+    <ng-template pTemplate="body">
+        <div class="px-3">
+            Trang hiện tại chưa được thiết kế cho màn hình Mobile, tiếp tục truy cập?
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <p-button label="Tiếp tục" (click)="confirm()"></p-button>
+        <p-button label="Huỷ" styleClass="p-button-outlined" (click)="reject()"></p-button>
+    </ng-template>
+</p-dialog>

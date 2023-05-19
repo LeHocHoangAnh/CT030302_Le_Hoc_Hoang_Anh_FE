@@ -1,0 +1,10 @@
+.content-not-found p {
+  width: 500px;
+  margin: auto;
+  color: #333;
+  font-size: 16px;
+  white-space: normal;
+  text-shadow: 0 0 0 transparent, 0 1px 1px #fff;
+  text-align: center;
+  font-family: Roboto, arial, sans-serif;
+}

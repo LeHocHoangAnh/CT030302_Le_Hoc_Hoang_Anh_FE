@@ -1,0 +1,47 @@
+ul {
+  list-style-type: none;
+  padding-left: 0;
+  border-radius: 20px;
+
+  a {
+    text-decoration: inherit;
+    display: flex;
+    align-items: center;
+    color: inherit;
+    padding: .5rem .75rem;
+    border-radius: 10px;
+  }
+
+  i {
+    font-size: 5vw;
+    margin-right: 12px;
+    color: #ea733b;
+    border-radius: 4%;
+  }
+
+  li {
+    line-height: 30px;
+  }
+}
+
+.img-profile {
+  position: relative;
+  height: 6vh;
+  width: 6vh;
+}
+
+img {
+  height: inherit;
+  width: inherit;
+  object-fit: cover;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+}
+
+.active-high-light {
+  color: #1bb7f2 !important;
+  border: 2px;
+  border-style: solid;
+  border-color: #83d6f5 !important;
+  font-weight: 500;
+}

@@ -1,0 +1,121 @@
+<div class="card border-0">
+  <div>
+    <div class="flex flex-row justify-content-between">
+      <div class="employee-detail">
+        <label class="detail-label">Tên nhân viên: </label>
+        <label class="ml-2">{{ detailTime.fullName }}</label>
+      </div>
+      <div class="employee-detail">
+        <label class="detail-label">Email: </label>
+        <label class="ml-2">{{ detailTime.email }}</label>
+      </div>
+      <div class="employee-detail">
+        <label class="detail-label">Loại hợp đồng: </label>
+        <label class="ml-2">{{ detailTime.typeContract }}</label>
+      </div>
+    </div>
+    <div class="edit-values-input card mt-2" [formGroup]="editForm">
+      <div class="salary-values ml-3">
+        <div class="employee-detail">
+          <label> Công Thực</label>
+          <input pInputText type="text" formControlName="salaryReal" />
+        </div>
+        <div class="employee-detail">
+          <label> Công Tính Lương</label>
+          <input pInputText type="text" formControlName="salaryCount" />
+        </div>
+      </div>
+      <div class="dayoff-ot-values p-4 flex flex-row justify-content-between">
+        <div class="flex flex-column align-items-start">
+          <div class="employee-detail">
+            <label> Đi muộn/ Về sớm(Lần)</label>
+            <input pInputText type="text" formControlName="lateTime" />
+          </div>
+          <div class="employee-detail">
+            <label> Đi Muộn/ Về Sớm/ Ra Ngoài(Giờ) </label>
+            <input pInputText type="text" formControlName="lateTimeHour" />
+          </div>
+          <div class="employee-detail">
+            <label> Quên Chấm Công</label>
+            <input pInputText type="text" formControlName="keepingForget" />
+          </div>
+          <div class="employee-detail">
+            <label> Phép</label>
+            <input pInputText type="text" formControlName="leaveDayAccept" />
+          </div>
+          <div class="employee-detail">
+            <label> Phép Tháng Hiện Tại</label>
+            <input pInputText type="text" formControlName="leaveRemainLastMonth" [attr.disabled]="true" />
+          </div>
+          <div class="employee-detail">
+            <label> Nghỉ Bù</label>
+            <input pInputText type="text" formControlName="compensatoryLeave" />
+          </div>
+          <div class="employee-detail">
+            <label> Nghỉ Bù OT Tháng Hiện Tại</label>
+            <input pInputText type="text" formControlName="csrLeaveLastMonth" [attr.disabled]="true" />
+          </div>
+          <div class="employee-detail">
+            <label> Nghỉ Bù Cộng Thêm Theo Tháng</label>
+            <input pInputText type="text" formControlName="csrLeavePlus" />
+          </div>
+          <div class="employee-detail">
+            <label> Nghỉ Bù Cộng Thêm Làm Tròn</label>
+            <input pInputText type="text" formControlName="csrLeavePlusRound" />
+          </div>
+          <div class="employee-detail">
+            <label> Nghỉ Phúc Lợi</label>
+            <input pInputText type="text" formControlName="welfareLeave" />
+          </div>
+          <br />
+        </div>
+        <div style="margin-top:25px;height:380px"></div>
+        <div class="flex flex-column align-items-end">
+          <div class="employee-detail">
+            <label> Ngày Remote</label>
+            <input pInputText type="text" formControlName="remoteTime" />
+          </div>
+          <div class="employee-detail">
+            <label> OT Ngày Thường</label>
+            <input pInputText type="text" formControlName="otNormal" />
+          </div>
+          <div class="employee-detail">
+            <label> OT Thứ 7</label>
+            <input pInputText type="text" formControlName="otMorning7" />
+          </div>
+          <div class="employee-detail">
+            <label> OT Chủ Nhật</label>
+            <input pInputText type="text" formControlName="otSatSun" />
+          </div>
+          <div class="employee-detail">
+            <label> OT Ngày Lễ</label>
+            <input pInputText type="text" formControlName="otHoliday" />
+          </div>
+          <div class="employee-detail">
+            <label> OT Tính Lương</label>
+            <input pInputText type="text" formControlName="sumOtMonth" />
+          </div>
+          <div class="employee-detail">
+            <label> OT Trả Trong Tháng</label>
+            <input pInputText type="text" formControlName="otPayInMonth" />
+          </div>
+          <div class="employee-detail">
+            <label> OT Tồn Chưa Thanh Toán</label>
+            <input pInputText type="text" formControlName="otUnpaid" />
+          </div>
+          <div class="employee-detail">
+            <label> Phép Lưu Trữ Tháng Tiếp Theo</label>
+            <input pInputText type="text" formControlName="leaveRemainNow" />
+          </div>
+          <div class="employee-detail">
+            <label> Nghỉ Bù Lưu Trữ Tháng Tiếp Theo</label>
+            <input pInputText type="text" formControlName="csrLeaveNow" />
+          </div>
+        </div>
+      </div>
+      <div>
+        <button pButton type="submit" icon="pi pi-check" label="Lưu" (click)="onSave()" class="save-button"></button>
+      </div>
+    </div>
+  </div>
+</div>

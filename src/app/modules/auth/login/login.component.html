@@ -1,0 +1,40 @@
+<div class="row justify-content-center">
+    <h2 class="text-center text-dark mt-3">Welcome to LASOL</h2>
+    <form class="p-lg-5 pb-lg-2 form-login" [formGroup]="formData">
+        <div class="logo col-sm-12 mt-2">
+            <img src="./assets\images\logoNew-removebg-preview.png" alt="login" />
+        </div>
+        <div *ngIf="isLoginFailed" class="login-failed">
+            <span>{{validate.MES_1}}</span>
+        </div>
+        <div class="form-input col-sm-12">
+            <div class="col-sm-12 mb-2 flex flex-column">
+                <div class="min-w-full flex flex-row justify-content-center">
+                    <input type="text" class="form-control w-full" formControlName="email" maxlength="40"
+                        aria-describedby="emailHelp" placeholder="Email"
+                        [ngClass]="{ 'ng-dirty': submitted && f.email.errors }">
+                </div>
+                <div *ngIf="(f.email.invalid && f.email.dirty) || (submitted && f.email.errors)" class="p-error">
+                    <div *ngIf="f.email.errors">{{validate.MES_2}}</div>
+                </div>
+            </div>
+            <div class="col-sm-12 mb-1 flex flex-column">
+                <div class="min-w-full flex flex-row justify-content-center">
+                    <input type="password" class="form-control w-full" formControlName="password" maxlength="30"
+                        placeholder="Password" [ngClass]="{ 'ng-dirty': submitted && f.password.errors }">
+                </div>
+                <div *ngIf="(f.password.invalid && f.password.dirty) || (submitted && f.password.errors)"
+                    class="p-error">
+                    <div *ngIf="f.password.errors">{{validate.MES_3}}</div>
+                </div>
+            </div>
+            <div class="mb-5"><a style="text-decoration: none; font-size: 0.9rem; float: right" href="#"
+                    routerLink="/forgot">Quên mật khẩu?</a></div>
+            <button type="submit" (click)="onSubmit()" class="btn-color col-sm-12 mt-3 mb-3 w-full">Đăng nhập</button>
+            <h2 class="social-login-divider"><span>Hoặc</span></h2>
+            <div class="flex justify-content-center mt-2 mb-3 md:mt-1">
+                <div id="buttonDiv"> login google</div>
+            </div>
+        </div>
+    </form>
+</div>

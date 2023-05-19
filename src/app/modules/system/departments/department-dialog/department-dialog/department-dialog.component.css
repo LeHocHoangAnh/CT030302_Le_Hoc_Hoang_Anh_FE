@@ -1,0 +1,9 @@
+.input-label{
+    margin-right:50px;
+}
+div{
+    margin-top:15px;
+}
+:host ::ng-deep .p-inputnumber-input{
+    width:300px;
+}

@@ -1,0 +1,22 @@
+.table-confirm-edit .label-title {
+    font-size: 16px;
+    font-weight: 500;
+  }
+  .table-confirm-edit .td-title{
+    text-align: center;
+  }
+  
+  .table-confirm-edit .td-content{
+    padding: 8px;
+  }
+  
+  .field-radiobutton{
+    margin-bottom: 0;
+  }
+  
+  :host ::ng-deep .p-inputtextarea {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: #ced4da !important;
+  }
+  

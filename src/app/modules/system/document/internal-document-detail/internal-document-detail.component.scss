@@ -1,0 +1,30 @@
+a {
+    text-decoration: none;
+    color: #113993;
+}
+
+:host ::ng-deep .p-panel-icons .p-button-icon-only .p-button-icon {
+    @media(min-width: 1024px) {
+        font-size: 1.5vw;
+    }
+}
+
+:host ::ng-deep .p-dialog {
+    .p-dialog {
+        max-height: 100%;
+    }
+}
+
+:host ::ng-deep .ui-dynamicdialog {
+    max-height: 100%;
+}
+
+.ck-config {
+    display: inline-block !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+:host ::ng-deep .cke_reset {
+    height: 92% !important;
+}

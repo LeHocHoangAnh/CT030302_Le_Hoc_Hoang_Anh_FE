@@ -1,0 +1,153 @@
+<div class="body-projects-edit">
+  <div class="edit-projects" [formGroup]="formData">
+    <table class="form-edit-projects">
+      <tr>
+        <td class="title-edit-project">Mã Dự Án</td>
+        <td>
+          <input class="custom-tb" type="text" [maxLength]="30" formControlName="codeProjects" name="codeProjects"
+            pInputText [ngClass]="{
+              'ng-dirty': isSubmited && f.codeProjects.errors
+            }" />
+          <div *ngIf="isSubmited && f.codeProjects.errors" class="p-error mx-2">
+            {{ mes.MES_7 }}
+          </div>
+        </td>
+        <td class="title-edit-project">Tên Dự Án</td>
+        <td>
+          <input class="custom-tb" type="text" [maxLength]="30" formControlName="nameProjects" name="nameProjects"
+            pInputText [ngClass]="{
+              'ng-dirty': isSubmited && f.nameProjects.errors
+            }" />
+          <div *ngIf="isSubmited && f.nameProjects.errors" class="p-error mx-2">
+            {{ mes.MES_7 }}
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="title-edit-project">Ngày Bắt Đầu</td>
+        <td>
+          <p-calendar [style]="{ width: '80%' }" [showIcon]="true" formControlName="timeStart" dateFormat="dd-mm-yy"
+            placeholder="dd-mm-yyyy" dataType="string" name="timeStart" inputId="icon" [ngClass]="{
+              'ng-dirty': isSubmited && f.timeStart.errors
+            }">
+          </p-calendar>
+          <div *ngIf="isSubmited && f.timeStart.errors" class="p-error mx-2">
+            {{ mes.MES_7 }}
+          </div>
+        </td>
+        <td class="title-edit-project">Ngày Kết Thúc</td>
+        <td>
+          <p-calendar [style]="{ width: '80%' }" [showIcon]="true" formControlName="timeEnd" dateFormat="dd-mm-yy"
+            placeholder="dd-mm-yyyy" dataType="string" name="timeEnd" inputId="icon" [ngClass]="{
+              'ng-dirty': isSubmited && f.timeEnd.errors
+            }">
+          </p-calendar>
+          <div *ngIf="isSubmited && f.timeEnd.errors" class="p-error mx-2">
+            {{ mes.MES_7 }}
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="title-edit-project">Công Nghệ</td>
+        <td>
+          <input class="custom-tb" type="text" formControlName="technology" name="technology" [maxLength]="30"
+            pInputText [ngClass]="{
+              'ng-dirty': isSubmited && f.technology.errors
+            }" />
+          <div *ngIf="isSubmited && f.technology.errors" class="p-error mx-2">
+            {{ mes.MES_7 }}
+          </div>
+        </td>
+        <td class="title-edit-project">Khách Hàng</td>
+        <td>
+          <input class="custom-tb" type="text" formControlName="customer" name="customer" [maxLength]="30" pInputText
+            [ngClass]="{
+              'ng-dirty': isSubmited && f.customer.errors
+            }" />
+          <div *ngIf="isSubmited && f.customer.errors" class="p-error mx-2">
+            {{ mes.MES_7 }}
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="title-edit-project">Mô Tả Dự Án</td>
+        <td colspan="3">
+          <textarea rows="4" name="description" formControlName="description" cols="100" pInputTextarea
+            autoResize="autoResize" [ngClass]="{
+              'ng-dirty': isSubmited && f.description.errors
+            }"></textarea>
+          <div *ngIf="isSubmited && f.description.errors" class="p-error mx-2">
+            {{ mes.MES_7 }}
+          </div>
+        </td>
+      </tr>
+    </table>
+    <div class="btn-edit-projects">
+      <button pButton pRipple type="button" label="Lưu" (click)="saveProject()" class="p-button-outlined"></button>
+    </div>
+  </div>
+  <div class="title-employee-join text-center">
+    <span>Nhân Viên Tham Gia</span>
+  </div>
+  <div class="btn-edit-projects m-2 flex justify-content-between">
+    <div class="btn-from">
+      <button pButton pRipple (click)="show(null)" type="button" label="Thêm Nhân Viên"
+        class="p-button-outlined"></button>
+    </div>
+    <div class="page-from">
+      <p-paginator [rows]="pageSize" [totalRecords]="totalRecord" [pageLinkSize]="pageLinkSize"
+        (onPageChange)="pageClick($event)" #paginator>
+      </p-paginator>
+    </div>
+  </div>
+  <p-table [columns]="columns" [resizableColumns]="true" [value]="listHistory" [scrollable]="true" scrollHeight="40vh"
+    styleClass="p-datatable-gridlines p-datatable-striped p-datatable-sm" selectionMode="single">
+    <ng-template pTemplate="colgroup">
+      <colgroup>
+        <col style="width: 9%" />
+        <col style="width: 12%" />
+        <col style="width: 20%" />
+        <col style="width: 15%" />
+        <col style="width: 15%" />
+        <col style="width: 10%" />
+        <col style="width: 10%" />
+        <col style="width: 9%" />
+      </colgroup>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th *ngFor="let col of columns" style="text-align: center">
+          {{ col.header }}
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-data>
+      <tr [pSelectableRow]="data">
+        <td style="text-align: center">
+          <button pButton pRipple type="button" icon="pi pi-pencil" (click)="show(data.id)"
+            class="p-button-rounded p-button-text p-button-info btn-delete"></button>
+        </td>
+        <td style="text-align: center" class="router-link" routerLink="/home/{{data.idEmployee}}">{{data.employeeCode}}
+        </td>
+        <td style="text-align: center">{{data.fullName}}</td>
+        <td style="text-align: center">{{data.timeStart}}</td>
+        <td style="text-align: center">{{data.timeEnd}}</td>
+        <td style="text-align: center">{{data.role}}</td>
+        <td style="text-align: center">{{data.otTime}}</td>
+        <td style="text-align: center">
+          <button pButton pRipple type="button" icon="pi pi-times" (click)="confirm('top', data.id)"
+            class="p-button-rounded p-button-text p-button-danger btn-delete"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+<p-toast position="top-right" [hidden]="showToast"></p-toast>
+<p-confirmDialog #cd [style]="{ width: '30vw' }" key="positionDialog" [position]="position"
+  rejectButtonStyleClass="p-button-outlined">
+  <ng-template pTemplate="footer">
+    <button type="button" class="succer-button" [style]="{ padding: '5px 10px' }" pButton
+      (click)="cd.accept()"></button>
+    <button type="button" class="cancel-button" pButton (click)="cd.reject()"></button>
+  </ng-template>
+</p-confirmDialog>

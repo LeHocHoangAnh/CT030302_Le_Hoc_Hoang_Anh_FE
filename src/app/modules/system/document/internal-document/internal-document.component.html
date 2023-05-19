@@ -1,0 +1,58 @@
+<div class="grid px-2 pt-2 pb-0" header="Danh Sách Trang">
+    <div class="col-12">
+        <div *ngIf="isHr" class="w-full grid justify-content-end">
+            <button pButton pRipple icon="pi pi-plus" label="Thêm Mới" class="p-button-outlined right-0"
+                (click)='openDetailDialog(null)'></button>
+        </div>
+        <p-table #listTb [value]="documentList" [rows]="7" [paginator]="true"
+            [globalFilterFields]="['name', 'description', 'updatedAt', 'updatedBy']" selectionMode="single"
+            class="ml-4">
+            <ng-template pTemplate="caption">
+                <div class="flex justify-content-between align-items-center">
+                    <span><label>Danh Sách Trang</label></span>
+                    <span class="p-input-icon-right p-ml-auto">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" class="p-inputtext-sm"
+                            (input)="listTb.filterGlobal($event.target.value, 'contains')"
+                            placeholder="Search keyword" />
+                    </span>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="colgroup">
+                <colgroup *ngIf="!isHr">
+                    <col style="width: 50%" />
+                    <col *ngIf="!mobileScreen" style="width: 50%" />
+                </colgroup>
+                <colgroup *ngIf="isHr">
+                    <col style="width: 50%" />
+                    <col *ngIf="!mobileScreen" style="width: 45%" />
+                    <col style="width: 5%" />
+                </colgroup>
+            </ng-template>
+            <ng-template pTemplate="body" let-doc>
+                <tr>
+                    <td>
+                        <div>
+                            <label style="color:#113993;cursor: pointer;"
+                                (click)="openDetailDialog(doc.id)">{{doc.name}}</label>
+                            <p style="font-size: 12px">{{doc.description}}</p>
+                        </div>
+                    </td>
+                    <td *ngIf="!mobileScreen" style="text-align:right">
+                        <div>
+                            <label>Last update on {{doc.updatedAt}}</label>
+                            <p style="font-size: 12px">by {{doc.updatedBy}}</p>
+                        </div>
+                    </td>
+                    <td style="cursor: pointer;" *ngIf="isHr">
+                        <button pButton icon="pi pi-times"
+                            class="p-button-rounded p-button-info p-button-text {{mobileScreen?'p-button-raised':''}} p-button-danger"
+                            (click)="deleteConfirmPopup(doc.id,$event)"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+<p-confirmDialog header="Xác Nhận" icon="pi pi-exclamation-triangle" baseZIndex="2"></p-confirmDialog>
+<p-toast></p-toast>

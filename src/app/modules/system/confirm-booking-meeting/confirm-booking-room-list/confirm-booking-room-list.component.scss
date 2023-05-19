@@ -1,0 +1,58 @@
+
+.container-approve .approve-header .approve-time {
+    display: flex;
+    align-items: center;
+  }
+  .container-approve .approve-header .approve-time span{
+    margin-right: 5px;
+    font-weight: 500;
+    font-size: 16px;
+  }
+  .container-approve .approve-header{
+    display: flex;
+    margin-bottom: 10px;
+  }
+  
+  :host ::ng-deep .p-dropdown {
+    width: 12rem;
+  }
+  
+  :host ::ng-deep .p-paginator {
+    justify-content: flex-end;
+  }
+  
+  :host ::ng-deep .p-table {
+    table-layout: fixed;
+    width: 100%;
+  }
+  
+  .form-search {
+    display: flex;
+    margin: 10px 0;
+  }
+  
+  .form-search .input-name {
+    align-items: center;
+    display: flex;
+    margin: 0 20px;
+  }
+  
+  .container-approve .approve-header .approve-time .select-time {
+    display: flex;
+    align-items: center;
+  }
+  
+  .search-btn {
+    font-weight: 500;
+  }
+  
+  #th-title {
+    text-align: center;
+    padding: 5px;
+    white-space: inherit;
+  }
+  
+  .field-checkbox {
+    margin-bottom: 0;
+  }
+  
